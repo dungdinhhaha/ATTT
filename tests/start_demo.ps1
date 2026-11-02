@@ -20,7 +20,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Demo before failed' }
 Write-Host "`n=== SAU KHI SUA ==="
 python tests/live_demo.py --mode fixed --url http://127.0.0.1:8000
 if ($LASTEXITCODE -ne 0) { throw 'Demo fixed failed' }
-Write-Host "`n=== 23 CA KIEM THU ==="
+Write-Host "`n=== 26 CA KIEM THU ==="
 python tests/demo.py
 if ($LASTEXITCODE -ne 0) { throw 'Automated demo failed' }
 Start-Process -FilePath (Join-Path $PSScriptRoot 'results\demo.html')

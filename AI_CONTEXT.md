@@ -23,7 +23,7 @@
 - `docs/evidence/Yeu_cau_va_minh_chung.xlsx`: bảng đối chiếu yêu cầu đề bài, việc đã làm, hướng dẫn và tiêu chí/minh chứng; không phải kế hoạch công việc.
 
 ## Kết quả đã kiểm chứng
-Lần chạy gần nhất của `python tests/demo.py`: bản fixed đạt 26/26; p95 v1=2.089 ms, v2=2.064 ms (giá trị thay đổi theo lần chạy). Đo bằng HTTPX ASGI cùng tiến trình, không suy ra hiệu năng production. Newman: 3/3 assertions cho mỗi collection BOLA. Docker Compose và OPA đã chạy thật; `python tests/verify_opa.py` xác nhận quyết định cho phép/từ chối và phản hồi API. Xem `tests/results/opa_runtime.json`. OPA chỉ được bật trong Compose, không bật trong bộ ASGI 26 ca.
+Kết quả lưu trong `tests/results/before_after.json`: bản fixed đạt 26/26; p95 v1=2.781 ms, v2=2.970 ms (giá trị thay đổi theo lần chạy). Đo bằng HTTPX ASGI cùng tiến trình, không suy ra hiệu năng production. Newman: 3/3 assertions cho mỗi collection BOLA. Docker Compose và OPA đã chạy thật; `python tests/verify_opa.py` xác nhận quyết định cho phép/từ chối và phản hồi API. Xem `tests/results/opa_runtime.json`. OPA chỉ được bật trong Compose, không bật trong bộ ASGI 26 ca.
 
 ## Quy tắc khi AI hỗ trợ nhóm
 1. Kiểm tra `git status` và đọc file liên quan trước khi sửa; không ghi đè thay đổi của thành viên.
@@ -33,5 +33,5 @@ Lần chạy gần nhất của `python tests/demo.py`: bản fixed đạt 26/26
 5. Không tự nhận dự án đạt điểm tối đa; điểm do giảng viên quyết định.
 
 ## Việc còn mở
-Mở rộng Postman/Newman ra ngoài BOLA; khởi chạy và xác minh Docker/OPA runtime; điền danh tính nhóm ở bìa; cập nhật số liệu báo cáo sau mỗi lần chạy mới.
+Mở rộng Postman/Newman ra ngoài BOLA; đo độ trễ khi OPA sidecar bật dưới tải lặp lại; điền danh tính nhóm ở bìa; cập nhật số liệu báo cáo sau mỗi lần chạy mới.
 

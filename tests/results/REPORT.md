@@ -56,7 +56,7 @@ Số này chỉ mô tả lần chạy trên máy lab; cần tải thật qua HTT
 - Bộ test tự động: `tests/demo.py`; báo cáo máy đọc: `tests/results/junit.xml`.
 - Request/response đã bỏ token, trạng thái DB và log từ chối có correlation ID: `tests/results/before_after.json`.
 - Đặc tả OpenAPI: `tests/results/openapi.json`.
-- Hướng dẫn log và phạm vi đạo đức: `docs/LOGGING.md`, `docs/RULES_OF_ENGAGEMENT.md`.
+- Hướng dẫn log và phạm vi đạo đức: `docs/guides/LOGGING.md`, `docs/guides/RULES_OF_ENGAGEMENT.md`.
 
 ## Giới hạn
 

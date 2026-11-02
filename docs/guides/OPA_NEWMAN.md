@@ -4,7 +4,7 @@
 
 `app/policy/after/minibank.rego` đặc tả sáu quyết định phân quyền: đọc tài khoản của chủ sở hữu, đọc qua ticket hỗ trợ, xem danh sách admin, đổi vai trò, sửa hồ sơ cá nhân và tạo chuyển khoản từ tài khoản sở hữu. API gửi subject, role, MFA và thuộc tính tài nguyên do máy chủ xác định tới `POST /v1/data/minibank/authz/allow`. OPA trả `result: true` mới được phép tiếp tục. Khi `OPA_URL` đã cấu hình mà OPA không phản hồi hoặc không có kết quả, API từ chối theo nguyên tắc fail closed.
 
-Compose gắn API và OPA vào mạng nội bộ `lab`, không công khai cổng OPA. Chạy `docker compose up --build` khi Docker Engine hoạt động. Kiểm tra bản đã sửa bằng `python tests/live_demo.py --mode fixed`. Chế độ Python chạy trực tiếp không đặt `OPA_URL` nên tiếp tục dùng policy trong ứng dụng; kết quả Python không được ghi là kết quả OPA.
+Compose gắn API và OPA vào mạng nội bộ `lab`, không công khai cổng OPA. Chạy `docker compose up -d --build` rồi `python tests/verify_opa.py`. Kiểm tra demo trực tiếp bằng `python tests/live_demo.py --mode fixed`. Chế độ Python chạy trực tiếp không đặt `OPA_URL` nên tiếp tục dùng policy trong ứng dụng; kết quả Python không được ghi là kết quả OPA.
 
 ## Newman
 

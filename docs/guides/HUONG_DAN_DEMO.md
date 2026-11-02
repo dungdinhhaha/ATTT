@@ -25,7 +25,7 @@ Nếu muốn kiểm tra nhanh API đang chạy: mở `http://127.0.0.1:8000/acco
 
 Docker Compose và OPA đã chạy và được xác minh ngày 02/11/2026. Để trình bày OPA, chạy `docker compose up -d --build`, sau đó `python tests/verify_opa.py` và mở `tests/results/opa_runtime.json`: OPA trả `true` cho Alice đọc tài khoản mình, `false` cho tài khoản Bob; API trả 200/403 tương ứng, 403 có `opa_denied` và correlation ID. Dừng bằng `docker compose down` trước khi chạy script demo Python dùng cùng cổng 8000.
 
-Khi Docker Desktop hoạt động trở lại, có thể chứng minh cấu hình container bằng `docker compose up --build` tại thư mục này. API sẽ chỉ lắng nghe ở `127.0.0.1:8000`; sau đó chạy `python tests/live_demo.py --mode fixed`. Dừng bằng `docker compose down`.
+Để trình diễn thêm request trực tiếp trên API Docker, chạy `python tests/live_demo.py --mode fixed` sau khi Compose khởi động. Dừng bằng `docker compose down`.
 
 ## Tệp cần nộp
 
@@ -33,4 +33,4 @@ Khi Docker Desktop hoạt động trở lại, có thể chứng minh cấu hìn
 - `app/policy/permission_matrix.csv`: ma trận quyền.
 - `tests/demo.py`, `tests/live_demo.py`, `tests\results\junit.xml`: kiểm thử tự động.
 - `tests\results\demo.html`, `tests\results\before_after.json`, `tests\results\REPORT.md`: kết quả, request/response đã khử bí mật, log có correlation ID.
-- `docs\LOGGING.md`, `docs\RULES_OF_ENGAGEMENT.md`, `docs\THREAT_MODEL.md`: ghi log, giới hạn an toàn và mô hình đe dọa.
+- `docs\guides\LOGGING.md`, `docs\guides\RULES_OF_ENGAGEMENT.md`, `docs\guides\THREAT_MODEL.md`: ghi log, giới hạn an toàn và mô hình đe dọa.
