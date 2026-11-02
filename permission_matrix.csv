@@ -1,0 +1,22 @@
+policy_id,actor,method,route,condition,decision,scope,evidence_case
+P01,anonymous,GET,/accounts/{id},missing_token,deny,-,Không có token
+P02,customer,GET,/accounts/{id},owner_is_subject,allow,accounts:read,Customer hợp lệ
+P03,customer,GET,/accounts/{id},owner_differs,deny,accounts:read,BOLA customer
+P04,customer,POST,/transfers,source_owner_and_limit_and_key,allow,transfers:create,Gửi lặp giao dịch
+P05,customer,POST,/transfers,source_not_owned,deny,transfers:create,Chuyển từ tài khoản khác
+P06,customer,PATCH,/profile/{id},self_and_allowed_fields,allow,profile:write,Sửa hồ sơ hợp lệ
+P07,support,GET,/support/accounts/{id},open_ticket,allow_masked,support:read,Support có ticket
+P08,support,GET,/support/accounts/{id},no_open_ticket,deny,support:read,BOLA support ngoài ticket
+P09,support,POST,/admin/users/{id}/role,not_admin,deny,admin:users,BFLA support nâng role
+P10,admin,POST,/admin/users/{id}/role,current_admin_and_mfa_and_not_self,allow,admin:users,Admin hợp lệ
+P11,admin,POST,/admin/users/{id}/role,no_mfa,deny,admin:users,Admin thiếu MFA
+P12,customer,PATCH,/profile/{id},forbidden_field,deny,profile:write,Mass assignment
+P13,customer,POST,/transfers,same_key_same_body,one_transaction,transfers:create,Gửi song song cùng key
+P14,customer,POST,/transfers,same_key_different_body,deny_conflict,transfers:create,Cùng key khác nội dung
+P15,customer,POST,/transfers,cumulative_amount_exceeds_70,deny,transfers:create,Chia nhỏ vượt hạn mức
+P16,anonymous,POST,/auth/login,more_than_3_attempts,rate_limit,-,Giới hạn đăng nhập
+P17,customer,GET,/transfers,limit_exceeds_100,deny,accounts:read,Giới hạn page size
+P18,customer,GET,/accounts/{id},wrong_audience_or_expired,deny,-,JWT sai audience
+P19,admin,POST,/admin/users/{self}/role,self_change,deny,admin:users,Admin tự nâng quyền
+P20,agent,POST,/transfers,read_only_scope,deny,accounts:read,Agent không được ghi
+P21,anonymous,POST,/auth/login,at_or_below_3_attempts,allow_attempt,-,Đăng nhập dưới ngưỡng

@@ -1,0 +1,114 @@
+{
+  "info": {
+    "name": "De tai 27 - BOLA - Sau khi sua",
+    "description": "Lab cuc bo. Token va du lieu deu gia. Chay start_demo.ps1 truoc khi bam Send.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_before",
+      "value": "http://127.0.0.1:8001"
+    },
+    {
+      "key": "base_fixed",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "lab_secret",
+      "value": "minibank-lab-only-fixed-demo-key"
+    }
+  ],
+  "item": [
+    {
+      "name": "1 - BOLA truoc khi sua (mong doi 200 - LOI)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{base_fixed}}/accounts/acc-b",
+        "description": "Alice dung token cua minh de doc tai khoan Bob. Ban loi tra 200."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 403 expected', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 - BOLA sau khi sua (mong doi 403 - BI CHAN)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{base_fixed}}/accounts/acc-b",
+        "description": "Cung token Alice, cung tai khoan Bob. Ban da sua phai tra 403."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 403 expected', () => pm.response.to.have.status(403));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 - Alice doc tai khoan cua minh (mong doi 200)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": "{{base_fixed}}/accounts/acc-a",
+        "description": "Doi chieu: Alice van doc duoc tai khoan cua chinh minh."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('HTTP 200 expected', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const enc = s => CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(s)).replace(/=+$/, '').replace(/\\+/g, '-').replace(/\\//g, '_');",
+          "const header = enc(JSON.stringify({alg:'HS256',typ:'JWT'}));",
+          "const payload = enc(JSON.stringify({iss:'minibank-lab',aud:'minibank-api',sub:'alice',role:'customer',scope:'accounts:read transfers:create profile:write',mfa:false,exp:Math.floor(Date.now()/1000)+300}));",
+          "const body = header + '.' + payload;",
+          "const sig = CryptoJS.HmacSHA256(body, pm.collectionVariables.get('lab_secret'));",
+          "pm.collectionVariables.set('token', body + '.' + CryptoJS.enc.Base64.stringify(sig).replace(/=+$/, '').replace(/\\+/g, '-').replace(/\\//g, '_'));"
+        ]
+      }
+    }
+  ]
+}

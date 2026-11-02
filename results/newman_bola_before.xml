@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="De tai 27 - BOLA - Truoc khi sua" tests="3" time="0.049">
+  <testsuite name="1 - BOLA truoc khi sua (mong doi 200 - LOI)" id="c2eb49b9-4286-4386-a999-67daf0ba48f5" timestamp="2026-11-02T07:01:07.422Z" tests="1" failures="0" errors="0" time="0.040">
+    <testcase name="HTTP 200 expected" time="0.040" classname="1BolaTruocKhiSuaMongDoi200Loi"/>
+  </testsuite>
+  <testsuite name="2 - BOLA sau khi sua (mong doi 403 - BI CHAN)" id="6de58f7e-a48c-48ed-b1a7-83f1067248cc" timestamp="2026-11-02T07:01:07.422Z" tests="1" failures="0" errors="0" time="0.005">
+    <testcase name="HTTP 200 expected" time="0.005" classname="2BolaSauKhiSuaMongDoi403BiChan"/>
+  </testsuite>
+  <testsuite name="3 - Alice doc tai khoan cua minh (mong doi 200)" id="594caf16-20e4-4245-bbe3-7092e278825d" timestamp="2026-11-02T07:01:07.422Z" tests="1" failures="0" errors="0" time="0.004">
+    <testcase name="HTTP 200 expected" time="0.004" classname="3AliceDocTaiKhoanCuaMinhMongDoi200"/>
+  </testsuite>
+</testsuites>

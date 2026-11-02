@@ -1,0 +1,26 @@
+services:
+  minibank:
+    build: .
+    environment:
+      LAB_MODE: ${LAB_MODE:-fixed}
+      OPA_URL: http://opa:8181/v1/data/minibank/authz/allow
+    depends_on:
+      - opa
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    networks:
+      - lab
+  opa:
+    image: openpolicyagent/opa:1.9.0
+    command: ["run", "--server", "--addr", "0.0.0.0:8181", "/policy/minibank.rego"]
+    volumes:
+      - ./policy/after/minibank.rego:/policy/minibank.rego:ro
+    read_only: true
+    networks:
+      - lab
+networks:
+  lab:
+    internal: true

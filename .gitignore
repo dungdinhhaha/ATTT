@@ -1,0 +1,25 @@
+# Python and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Secrets and credentials
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.*
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local runtime artifacts
+*.log

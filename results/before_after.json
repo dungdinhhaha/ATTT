@@ -1,0 +1,1354 @@
+{
+  "before": [
+    {
+      "case": "BOLA support ngoài ticket",
+      "request": "GET /support/accounts/acc-b; actor=sam; scope=support:read",
+      "status": 200,
+      "safe": false,
+      "request_id": "07697fd5-5ef0-4235-8024-c1dac1b78503",
+      "response": {
+        "id": "acc-b",
+        "owner": "bob",
+        "balance": 100
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "07697fd5-5ef0-4235-8024-c1dac1b78503",
+        "subject": "sam",
+        "method": "GET",
+        "route": "/support/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P08/P14",
+        "status": 200,
+        "duration_ms": 3.228
+      }
+    },
+    {
+      "case": "Support có ticket",
+      "request": "GET /support/accounts/acc-a; actor=sam; scope=support:read",
+      "status": 200,
+      "safe": false,
+      "request_id": "2dce0cb2-aff7-45e9-8317-582181a89550",
+      "response": {
+        "id": "acc-a",
+        "owner": "alice",
+        "balance": 100
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "2dce0cb2-aff7-45e9-8317-582181a89550",
+        "subject": "sam",
+        "method": "GET",
+        "route": "/support/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P08/P14",
+        "status": 200,
+        "duration_ms": 1.205
+      }
+    },
+    {
+      "case": "BOLA customer",
+      "request": "GET /accounts/acc-b; actor=alice",
+      "status": 200,
+      "safe": false,
+      "request_id": "b89317f8-c9d5-4949-b092-2b425c1664ec",
+      "response": {
+        "id": "acc-b",
+        "balance": 100,
+        "owner": "bob"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "b89317f8-c9d5-4949-b092-2b425c1664ec",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P02",
+        "status": 200,
+        "duration_ms": 0.823
+      }
+    },
+    {
+      "case": "Customer hợp lệ",
+      "request": "GET /accounts/acc-a; actor=alice",
+      "status": 200,
+      "safe": true,
+      "request_id": "fd147ed1-7d68-4af0-98b6-8d1ce5efaaec",
+      "response": {
+        "id": "acc-a",
+        "balance": 100,
+        "owner": "alice"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "fd147ed1-7d68-4af0-98b6-8d1ce5efaaec",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P02",
+        "status": 200,
+        "duration_ms": 1.342
+      }
+    },
+    {
+      "case": "Không có token",
+      "request": "GET /accounts/acc-a; Authorization absent",
+      "status": 401,
+      "safe": true,
+      "request_id": "a8fa4348-4243-4bde-8c64-0aa532395fe1",
+      "response": {
+        "detail": "missing_token"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "a8fa4348-4243-4bde-8c64-0aa532395fe1",
+        "subject": "anonymous",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "deny",
+        "policy_id": "P-DEFAULT",
+        "status": 401,
+        "duration_ms": 2.06
+      }
+    },
+    {
+      "case": "Sửa hồ sơ hợp lệ",
+      "request": "PATCH /profile/alice; body={phone:000-009}",
+      "status": 200,
+      "safe": true,
+      "request_id": "8362374b-e77c-4307-b6ab-73925de5936b",
+      "response": {
+        "full_name": "Alice Lab",
+        "phone": "000-009",
+        "role": "customer"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "8362374b-e77c-4307-b6ab-73925de5936b",
+        "subject": "alice",
+        "method": "PATCH",
+        "route": "/profile/{user_id}",
+        "decision": "allow",
+        "policy_id": "P06",
+        "status": 200,
+        "duration_ms": 2.357
+      }
+    },
+    {
+      "case": "BFLA support nâng role",
+      "request": "POST /admin/users/sam/role; actor=sam; body={role:admin}",
+      "status": 200,
+      "safe": false,
+      "request_id": "09b4a02e-86b6-47f1-848b-a1bf3abbe6a8",
+      "response": {
+        "user_id": "sam",
+        "role": "admin"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "admin"
+      },
+      "log": {
+        "request_id": "09b4a02e-86b6-47f1-848b-a1bf3abbe6a8",
+        "subject": "sam",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "allow",
+        "policy_id": "P10/P15/P17",
+        "status": 200,
+        "duration_ms": 2.289
+      }
+    },
+    {
+      "case": "Admin hợp lệ",
+      "request": "POST /admin/users/bob/role; actor=admin; MFA=true",
+      "status": 200,
+      "safe": true,
+      "request_id": "d606a13e-c292-456e-9ade-4f8adbce318c",
+      "response": {
+        "user_id": "bob",
+        "role": "support"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "d606a13e-c292-456e-9ade-4f8adbce318c",
+        "subject": "admin",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "allow",
+        "policy_id": "P10/P15/P17",
+        "status": 200,
+        "duration_ms": 2.258
+      }
+    },
+    {
+      "case": "Admin thiếu MFA",
+      "request": "POST /admin/users/bob/role; actor=admin; MFA=false",
+      "status": 200,
+      "safe": false,
+      "request_id": "fbcb27a7-a1e7-4b9c-ad4f-af5a479bd51c",
+      "response": {
+        "user_id": "bob",
+        "role": "support"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "fbcb27a7-a1e7-4b9c-ad4f-af5a479bd51c",
+        "subject": "admin",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "allow",
+        "policy_id": "P10/P15/P17",
+        "status": 200,
+        "duration_ms": 2.92
+      }
+    },
+    {
+      "case": "Admin tự nâng quyền",
+      "request": "POST /admin/users/admin/role; actor=admin; MFA=true",
+      "status": 200,
+      "safe": false,
+      "request_id": "2580c23c-2467-417b-8ea4-e24ed3e122da",
+      "response": {
+        "user_id": "admin",
+        "role": "support"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "2580c23c-2467-417b-8ea4-e24ed3e122da",
+        "subject": "admin",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "allow",
+        "policy_id": "P10/P15/P17",
+        "status": 200,
+        "duration_ms": 2.661
+      }
+    },
+    {
+      "case": "Mass assignment",
+      "request": "PATCH /profile/alice; body={role:admin}",
+      "status": 200,
+      "safe": false,
+      "request_id": "87bc6615-6a0b-4ecf-81e6-6ae72eff0890",
+      "response": {
+        "full_name": "Alice Lab",
+        "phone": "000-001",
+        "role": "admin"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "87bc6615-6a0b-4ecf-81e6-6ae72eff0890",
+        "subject": "alice",
+        "method": "PATCH",
+        "route": "/profile/{user_id}",
+        "decision": "allow",
+        "policy_id": "P06",
+        "status": 200,
+        "duration_ms": 1.711
+      }
+    },
+    {
+      "case": "Chuyển từ tài khoản khác",
+      "request": "POST /transfers; actor=alice; source=acc-b; amount=10",
+      "status": 200,
+      "safe": false,
+      "request_id": "b65560c9-4000-4aee-87c2-84c535679f20",
+      "response": {
+        "id": "tr-1",
+        "source": "acc-b",
+        "destination": "acc-a",
+        "amount": 10
+      },
+      "db": {
+        "balances": {
+          "acc-a": 110,
+          "acc-b": 90
+        },
+        "transfer_count": 1,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "b65560c9-4000-4aee-87c2-84c535679f20",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "allow",
+        "policy_id": "P04/P05",
+        "status": 200,
+        "duration_ms": 4.023
+      }
+    },
+    {
+      "case": "Gửi lặp giao dịch",
+      "request": "POST /transfers x5; same Idempotency-Key; amount=10",
+      "status": 200,
+      "safe": false,
+      "request_id": "88eb9198-7391-4cf0-ac17-84bf4fea0a27",
+      "response": {
+        "id": "tr-5",
+        "source": "acc-a",
+        "destination": "acc-b",
+        "amount": 10
+      },
+      "db": {
+        "balances": {
+          "acc-a": 50,
+          "acc-b": 150
+        },
+        "transfer_count": 5,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "88eb9198-7391-4cf0-ac17-84bf4fea0a27",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "allow",
+        "policy_id": "P04/P05",
+        "status": 200,
+        "duration_ms": 1.41
+      }
+    },
+    {
+      "case": "Gửi song song cùng key",
+      "request": "POST /transfers x20 concurrent; same Idempotency-Key; amount=10",
+      "status": 400,
+      "safe": false,
+      "request_id": "e8db9806-a25a-4cfc-9632-e8faa6c62b1b",
+      "response": {
+        "detail": "insufficient_funds"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 0,
+          "acc-b": 200
+        },
+        "transfer_count": 10,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "e8db9806-a25a-4cfc-9632-e8faa6c62b1b",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "deny",
+        "policy_id": "P04/P05",
+        "status": 400,
+        "duration_ms": 18.42
+      }
+    },
+    {
+      "case": "Cùng key khác nội dung",
+      "request": "POST /transfers x2; same key; amount=10 then 20",
+      "status": 200,
+      "safe": false,
+      "request_id": "7c25f2e3-fe4f-47b7-a705-846b880ba75a",
+      "response": {
+        "id": "tr-2",
+        "source": "acc-a",
+        "destination": "acc-b",
+        "amount": 20
+      },
+      "db": {
+        "balances": {
+          "acc-a": 70,
+          "acc-b": 130
+        },
+        "transfer_count": 2,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "7c25f2e3-fe4f-47b7-a705-846b880ba75a",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "allow",
+        "policy_id": "P04/P05",
+        "status": 200,
+        "duration_ms": 2.166
+      }
+    },
+    {
+      "case": "Chia nhỏ vượt hạn mức",
+      "request": "POST /transfers x4; distinct keys; amount=20 each",
+      "status": 200,
+      "safe": false,
+      "request_id": "ed6040af-a5f4-4670-95c7-83692015ec00",
+      "response": {
+        "id": "tr-4",
+        "source": "acc-a",
+        "destination": "acc-b",
+        "amount": 20
+      },
+      "db": {
+        "balances": {
+          "acc-a": 20,
+          "acc-b": 180
+        },
+        "transfer_count": 4,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "ed6040af-a5f4-4670-95c7-83692015ec00",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "allow",
+        "policy_id": "P04/P05",
+        "status": 200,
+        "duration_ms": 1.314
+      }
+    },
+    {
+      "case": "Giới hạn đăng nhập",
+      "request": "POST /auth/login x5; synthetic invalid credentials",
+      "status": 401,
+      "safe": false,
+      "request_id": "9d923871-e238-45b6-b027-2a13af99f3a8",
+      "response": {
+        "detail": "invalid_credentials"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "9d923871-e238-45b6-b027-2a13af99f3a8",
+        "subject": "anonymous",
+        "method": "POST",
+        "route": "/auth/login",
+        "decision": "deny",
+        "policy_id": "P-RATE",
+        "status": 401,
+        "duration_ms": 0.842
+      }
+    },
+    {
+      "case": "Đăng nhập dưới ngưỡng",
+      "request": "POST /auth/login x3; synthetic invalid credentials",
+      "status": 401,
+      "safe": true,
+      "request_id": "372cd2ba-4e25-440a-9777-7d948545cccb",
+      "response": {
+        "detail": "invalid_credentials"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "372cd2ba-4e25-440a-9777-7d948545cccb",
+        "subject": "anonymous",
+        "method": "POST",
+        "route": "/auth/login",
+        "decision": "deny",
+        "policy_id": "P-RATE",
+        "status": 401,
+        "duration_ms": 0.354
+      }
+    },
+    {
+      "case": "Giới hạn page size",
+      "request": "GET /transfers?limit=1000000",
+      "status": 200,
+      "safe": false,
+      "request_id": "74afeed9-cf9d-46af-be3d-4a3f037eb044",
+      "response": [],
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "74afeed9-cf9d-46af-be3d-4a3f037eb044",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/transfers",
+        "decision": "allow",
+        "policy_id": "P-LIMIT",
+        "status": 200,
+        "duration_ms": 0.865
+      }
+    },
+    {
+      "case": "JWT sai audience",
+      "request": "GET /accounts/acc-a; signed lab JWT aud=other-service",
+      "status": 200,
+      "safe": false,
+      "request_id": "cad6555e-d57e-4d59-a10f-866e1230d19c",
+      "response": {
+        "id": "acc-a",
+        "balance": 100,
+        "owner": "alice"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "cad6555e-d57e-4d59-a10f-866e1230d19c",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P02",
+        "status": 200,
+        "duration_ms": 1.28
+      }
+    },
+    {
+      "case": "JWT hết hạn",
+      "request": "GET /accounts/acc-a; signed lab JWT exp in past",
+      "status": 200,
+      "safe": false,
+      "request_id": "619acd85-89c5-4f79-b280-feec0ab27c9b",
+      "response": {
+        "id": "acc-a",
+        "balance": 100,
+        "owner": "alice"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "619acd85-89c5-4f79-b280-feec0ab27c9b",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P02",
+        "status": 200,
+        "duration_ms": 1.532
+      }
+    },
+    {
+      "case": "Agent không được ghi",
+      "request": "POST /transfers; actor=agent; read-only scope",
+      "status": 200,
+      "safe": false,
+      "request_id": "71f63d52-977e-400c-8e47-c26f6b1ac0fe",
+      "response": {
+        "id": "tr-1",
+        "source": "acc-a",
+        "destination": "acc-b",
+        "amount": 10
+      },
+      "db": {
+        "balances": {
+          "acc-a": 90,
+          "acc-b": 110
+        },
+        "transfer_count": 1,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "71f63d52-977e-400c-8e47-c26f6b1ac0fe",
+        "subject": "agent",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "allow",
+        "policy_id": "P04/P05",
+        "status": 200,
+        "duration_ms": 2.372
+      }
+    },
+    {
+      "case": "Log có ID, không lộ token",
+      "request": "GET /accounts/acc-b; actor=alice; inspect X-Request-ID and log",
+      "status": 200,
+      "safe": true,
+      "request_id": "402ee57b-933f-4dba-881b-fc8660d3747d",
+      "response": {
+        "id": "acc-b",
+        "balance": 100,
+        "owner": "bob"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "402ee57b-933f-4dba-881b-fc8660d3747d",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P02",
+        "status": 200,
+        "duration_ms": 1.819
+      }
+    }
+  ],
+  "after": [
+    {
+      "case": "BOLA support ngoài ticket",
+      "request": "GET /support/accounts/acc-b; actor=sam; scope=support:read",
+      "status": 403,
+      "safe": true,
+      "request_id": "101695ec-39ec-4926-9a19-28e8db4b6d95",
+      "response": {
+        "detail": "ticket_required"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "101695ec-39ec-4926-9a19-28e8db4b6d95",
+        "subject": "sam",
+        "method": "GET",
+        "route": "/support/accounts/{account_id}",
+        "decision": "deny",
+        "policy_id": "P08/P14",
+        "status": 403,
+        "duration_ms": 2.766
+      }
+    },
+    {
+      "case": "Support có ticket",
+      "request": "GET /support/accounts/acc-a; actor=sam; scope=support:read",
+      "status": 200,
+      "safe": true,
+      "request_id": "152091f6-318a-4709-b6a8-610db7216058",
+      "response": {
+        "id": "acc-a",
+        "owner": "alice",
+        "balance": "MASKED"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "152091f6-318a-4709-b6a8-610db7216058",
+        "subject": "sam",
+        "method": "GET",
+        "route": "/support/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P08/P14",
+        "status": 200,
+        "duration_ms": 1.146
+      }
+    },
+    {
+      "case": "BOLA customer",
+      "request": "GET /accounts/acc-b; actor=alice",
+      "status": 403,
+      "safe": true,
+      "request_id": "687188e7-a496-4f8e-8eca-e4f57d8e2453",
+      "response": {
+        "detail": "forbidden"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "687188e7-a496-4f8e-8eca-e4f57d8e2453",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "deny",
+        "policy_id": "P02",
+        "status": 403,
+        "duration_ms": 1.507
+      }
+    },
+    {
+      "case": "Customer hợp lệ",
+      "request": "GET /accounts/acc-a; actor=alice",
+      "status": 200,
+      "safe": true,
+      "request_id": "ac20adb1-68e3-4bb5-b973-31e996852b15",
+      "response": {
+        "id": "acc-a",
+        "balance": 100,
+        "owner": "alice"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "ac20adb1-68e3-4bb5-b973-31e996852b15",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "allow",
+        "policy_id": "P02",
+        "status": 200,
+        "duration_ms": 2.204
+      }
+    },
+    {
+      "case": "Không có token",
+      "request": "GET /accounts/acc-a; Authorization absent",
+      "status": 401,
+      "safe": true,
+      "request_id": "aa8fda9c-e591-4d57-bfb1-b7a6fbf2b31a",
+      "response": {
+        "detail": "missing_token"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "aa8fda9c-e591-4d57-bfb1-b7a6fbf2b31a",
+        "subject": "anonymous",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "deny",
+        "policy_id": "P-DEFAULT",
+        "status": 401,
+        "duration_ms": 1.018
+      }
+    },
+    {
+      "case": "Sửa hồ sơ hợp lệ",
+      "request": "PATCH /profile/alice; body={phone:000-009}",
+      "status": 200,
+      "safe": true,
+      "request_id": "21d24a53-2c81-479d-abcc-10269736ca1d",
+      "response": {
+        "full_name": "Alice Lab",
+        "phone": "000-009",
+        "role": "customer"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "21d24a53-2c81-479d-abcc-10269736ca1d",
+        "subject": "alice",
+        "method": "PATCH",
+        "route": "/profile/{user_id}",
+        "decision": "allow",
+        "policy_id": "P06",
+        "status": 200,
+        "duration_ms": 2.564
+      }
+    },
+    {
+      "case": "BFLA support nâng role",
+      "request": "POST /admin/users/sam/role; actor=sam; body={role:admin}",
+      "status": 403,
+      "safe": true,
+      "request_id": "33e88456-b457-4c4e-8871-538e44da9d94",
+      "response": {
+        "detail": "missing_scope"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "33e88456-b457-4c4e-8871-538e44da9d94",
+        "subject": "sam",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "deny",
+        "policy_id": "P-DEFAULT",
+        "status": 403,
+        "duration_ms": 1.691
+      }
+    },
+    {
+      "case": "Admin hợp lệ",
+      "request": "POST /admin/users/bob/role; actor=admin; MFA=true",
+      "status": 200,
+      "safe": true,
+      "request_id": "b2d71084-4e98-411a-b420-4e018c2bffd1",
+      "response": {
+        "user_id": "bob",
+        "role": "support"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "b2d71084-4e98-411a-b420-4e018c2bffd1",
+        "subject": "admin",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "allow",
+        "policy_id": "P10/P15/P17",
+        "status": 200,
+        "duration_ms": 3.36
+      }
+    },
+    {
+      "case": "Admin thiếu MFA",
+      "request": "POST /admin/users/bob/role; actor=admin; MFA=false",
+      "status": 403,
+      "safe": true,
+      "request_id": "e4be425a-ad15-44b1-a76e-9027f391ff03",
+      "response": {
+        "detail": "forbidden"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "e4be425a-ad15-44b1-a76e-9027f391ff03",
+        "subject": "admin",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "deny",
+        "policy_id": "P10/P15/P17",
+        "status": 403,
+        "duration_ms": 1.033
+      }
+    },
+    {
+      "case": "Admin tự nâng quyền",
+      "request": "POST /admin/users/admin/role; actor=admin; MFA=true",
+      "status": 403,
+      "safe": true,
+      "request_id": "062194a8-5b2e-4dda-9651-95c79bca38c9",
+      "response": {
+        "detail": "forbidden"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "062194a8-5b2e-4dda-9651-95c79bca38c9",
+        "subject": "admin",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "deny",
+        "policy_id": "P10/P15/P17",
+        "status": 403,
+        "duration_ms": 1.656
+      }
+    },
+    {
+      "case": "Mass assignment",
+      "request": "PATCH /profile/alice; body={role:admin}",
+      "status": 400,
+      "safe": true,
+      "request_id": "811c16a2-4fe8-4dec-a4dd-352d25d09235",
+      "response": {
+        "detail": "invalid_fields"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "811c16a2-4fe8-4dec-a4dd-352d25d09235",
+        "subject": "alice",
+        "method": "PATCH",
+        "route": "/profile/{user_id}",
+        "decision": "deny",
+        "policy_id": "P06",
+        "status": 400,
+        "duration_ms": 1.769
+      }
+    },
+    {
+      "case": "Chuyển từ tài khoản khác",
+      "request": "POST /transfers; actor=alice; source=acc-b; amount=10",
+      "status": 403,
+      "safe": true,
+      "request_id": "46b024df-01cb-46d0-9ddf-d720d3044948",
+      "response": {
+        "detail": "source_not_owned"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "46b024df-01cb-46d0-9ddf-d720d3044948",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "deny",
+        "policy_id": "P04/P05",
+        "status": 403,
+        "duration_ms": 2.111
+      }
+    },
+    {
+      "case": "Gửi lặp giao dịch",
+      "request": "POST /transfers x5; same Idempotency-Key; amount=10",
+      "status": 200,
+      "safe": true,
+      "request_id": "aae21db3-6a27-4872-8043-e67991ac1378",
+      "response": {
+        "id": "tr-1",
+        "source": "acc-a",
+        "destination": "acc-b",
+        "amount": 10
+      },
+      "db": {
+        "balances": {
+          "acc-a": 90,
+          "acc-b": 110
+        },
+        "transfer_count": 1,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "aae21db3-6a27-4872-8043-e67991ac1378",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "allow",
+        "policy_id": "P04/P05",
+        "status": 200,
+        "duration_ms": 2.094
+      }
+    },
+    {
+      "case": "Gửi song song cùng key",
+      "request": "POST /transfers x20 concurrent; same Idempotency-Key; amount=10",
+      "status": 200,
+      "safe": true,
+      "request_id": "8542214b-f9d4-4f04-920f-56a317e14646",
+      "response": {
+        "id": "tr-1",
+        "source": "acc-a",
+        "destination": "acc-b",
+        "amount": 10
+      },
+      "db": {
+        "balances": {
+          "acc-a": 90,
+          "acc-b": 110
+        },
+        "transfer_count": 1,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "8542214b-f9d4-4f04-920f-56a317e14646",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "allow",
+        "policy_id": "P04/P05",
+        "status": 200,
+        "duration_ms": 19.678
+      }
+    },
+    {
+      "case": "Cùng key khác nội dung",
+      "request": "POST /transfers x2; same key; amount=10 then 20",
+      "status": 409,
+      "safe": true,
+      "request_id": "4b188007-c72b-49fa-9d39-017fb19abc00",
+      "response": {
+        "detail": "key_reused_with_different_body"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 90,
+          "acc-b": 110
+        },
+        "transfer_count": 1,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "4b188007-c72b-49fa-9d39-017fb19abc00",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "deny",
+        "policy_id": "P04/P05",
+        "status": 409,
+        "duration_ms": 1.673
+      }
+    },
+    {
+      "case": "Chia nhỏ vượt hạn mức",
+      "request": "POST /transfers x4; distinct keys; amount=20 each",
+      "status": 403,
+      "safe": true,
+      "request_id": "26c03b75-461e-4f8e-b427-6ba7f53da5ac",
+      "response": {
+        "detail": "daily_limit"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 40,
+          "acc-b": 160
+        },
+        "transfer_count": 3,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "26c03b75-461e-4f8e-b427-6ba7f53da5ac",
+        "subject": "alice",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "deny",
+        "policy_id": "P04/P05",
+        "status": 403,
+        "duration_ms": 2.585
+      }
+    },
+    {
+      "case": "Giới hạn đăng nhập",
+      "request": "POST /auth/login x5; synthetic invalid credentials",
+      "status": 429,
+      "safe": true,
+      "request_id": "bbbf6f9f-c48d-47c9-878f-2a652c53f4f8",
+      "response": {
+        "detail": "rate_limited"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "bbbf6f9f-c48d-47c9-878f-2a652c53f4f8",
+        "subject": "anonymous",
+        "method": "POST",
+        "route": "/auth/login",
+        "decision": "deny",
+        "policy_id": "P-RATE",
+        "status": 429,
+        "duration_ms": 0.584
+      }
+    },
+    {
+      "case": "Đăng nhập dưới ngưỡng",
+      "request": "POST /auth/login x3; synthetic invalid credentials",
+      "status": 401,
+      "safe": true,
+      "request_id": "ebc17ee6-8ce6-4512-868b-649db2a1f7ea",
+      "response": {
+        "detail": "invalid_credentials"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "ebc17ee6-8ce6-4512-868b-649db2a1f7ea",
+        "subject": "anonymous",
+        "method": "POST",
+        "route": "/auth/login",
+        "decision": "deny",
+        "policy_id": "P-RATE",
+        "status": 401,
+        "duration_ms": 0.669
+      }
+    },
+    {
+      "case": "Giới hạn page size",
+      "request": "GET /transfers?limit=1000000",
+      "status": 400,
+      "safe": true,
+      "request_id": "0e22dfd0-d54e-4772-8d1d-03e9bcc2d7f4",
+      "response": {
+        "detail": "invalid_limit"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "0e22dfd0-d54e-4772-8d1d-03e9bcc2d7f4",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/transfers",
+        "decision": "deny",
+        "policy_id": "P-LIMIT",
+        "status": 400,
+        "duration_ms": 1.328
+      }
+    },
+    {
+      "case": "JWT sai audience",
+      "request": "GET /accounts/acc-a; signed lab JWT aud=other-service",
+      "status": 401,
+      "safe": true,
+      "request_id": "a2adbcd7-8596-4ba6-a8d9-7ac83b58090d",
+      "response": {
+        "detail": "invalid_token"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "a2adbcd7-8596-4ba6-a8d9-7ac83b58090d",
+        "subject": "anonymous",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "deny",
+        "policy_id": "P-DEFAULT",
+        "status": 401,
+        "duration_ms": 1.088
+      }
+    },
+    {
+      "case": "JWT hết hạn",
+      "request": "GET /accounts/acc-a; signed lab JWT exp in past",
+      "status": 401,
+      "safe": true,
+      "request_id": "f042c70e-1eca-4e1b-b2d5-cf40671aceb3",
+      "response": {
+        "detail": "invalid_token"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "f042c70e-1eca-4e1b-b2d5-cf40671aceb3",
+        "subject": "anonymous",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "deny",
+        "policy_id": "P-DEFAULT",
+        "status": 401,
+        "duration_ms": 2.233
+      }
+    },
+    {
+      "case": "Agent không được ghi",
+      "request": "POST /transfers; actor=agent; read-only scope",
+      "status": 403,
+      "safe": true,
+      "request_id": "73d0cfbb-d045-43e1-bfcb-8f0cca3cc0f8",
+      "response": {
+        "detail": "missing_scope"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "73d0cfbb-d045-43e1-bfcb-8f0cca3cc0f8",
+        "subject": "agent",
+        "method": "POST",
+        "route": "/transfers",
+        "decision": "deny",
+        "policy_id": "P-DEFAULT",
+        "status": 403,
+        "duration_ms": 4.932
+      }
+    },
+    {
+      "case": "Log có ID, không lộ token",
+      "request": "GET /accounts/acc-b; actor=alice; inspect X-Request-ID and log",
+      "status": 403,
+      "safe": true,
+      "request_id": "235c05e4-be78-4c6c-b230-37dd821f8978",
+      "response": {
+        "detail": "forbidden"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "235c05e4-be78-4c6c-b230-37dd821f8978",
+        "subject": "alice",
+        "method": "GET",
+        "route": "/accounts/{account_id}",
+        "decision": "deny",
+        "policy_id": "P02",
+        "status": 403,
+        "duration_ms": 1.76
+      }
+    }
+  ],
+  "latency": {
+    "before": {
+      "median_ms": 2.8,
+      "p95_ms": 4.254,
+      "note": "ASGI trong cùng tiến trình; chỉ minh họa chi phí lab, không suy ra hiệu năng triển khai thật"
+    },
+    "after": {
+      "median_ms": 3.926,
+      "p95_ms": 6.976,
+      "note": "ASGI trong cùng tiến trình; chỉ minh họa chi phí lab, không suy ra hiệu năng triển khai thật"
+    }
+  }
+}
