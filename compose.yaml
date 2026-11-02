@@ -17,7 +17,7 @@ services:
     image: openpolicyagent/opa:1.9.0
     command: ["run", "--server", "--addr", "0.0.0.0:8181", "/policy/minibank.rego"]
     volumes:
-      - ./policy/after/minibank.rego:/policy/minibank.rego:ro
+      - ./app/policy/after/minibank.rego:/policy/minibank.rego:ro
     read_only: true
     networks:
       - lab

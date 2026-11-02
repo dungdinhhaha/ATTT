@@ -9,9 +9,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt
-      - run: python demo.py
+      - run: python tests/demo.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lab-results
-          path: results/
+          path: tests/results/

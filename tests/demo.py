@@ -5,7 +5,10 @@ import json
 import statistics
 import time
 from pathlib import Path
+import sys
 from xml.etree import ElementTree as ET
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import httpx
 from app import create_app, issue_token
@@ -165,7 +168,7 @@ def html_report(data):
     return """<!doctype html><html lang='vi'><meta charset='utf-8'><title>Demo đề tài 27</title>
 <style>body{font:16px system-ui;max-width:1100px;margin:40px auto;color:#142538;background:#f5f8fb;padding:0 24px}h1{color:#123f70}section{background:white;padding:24px;border-radius:14px;margin:18px 0;box-shadow:0 3px 16px #dce5ee}table{border-collapse:collapse;width:100%}th,td{padding:10px;text-align:left;border-bottom:1px solid #dde5ed}th{background:#e5f1fb}.ok{color:#147246;font-weight:700}.warn{color:#a34b00}</style>
 <h1>Đề tài 27 · Demo kiểm thử API</h1><p>MiniBank-Lab, dữ liệu và token giả, chạy cục bộ.</p>
-<section><h2>Kết quả</h2><p class='ok'>Bản đã sửa: """+str(sum(x["safe"] for x in data["after"]))+"/"+str(len(data["after"]))+" ca đạt điều kiện kiểm tra.</p><p>Hai cột HTTP chỉ là tóm tắt; tệp JSON kèm trạng thái DB và log.</p><table><tr><th>Ca kiểm thử</th><th>HTTP v1</th><th>HTTP v2</th><th>Kết quả v2</th></tr>"+"".join(rows)+"</table></section><section><h2>Độ trễ mẫu</h2><p>p95 v1: "+str(data["latency"]["before"]["p95_ms"])+" ms · p95 v2: "+str(data["latency"]["after"]["p95_ms"])+" ms</p><p class='warn'>Đo trong cùng tiến trình, không dùng để kết luận hiệu năng production.</p></section><section><h2>Chạy lại</h2><p>Trong thư mục dự án: <code>python demo.py</code>. API riêng: <code>docker compose up --build</code>, chỉ mở tại 127.0.0.1:8000.</p></section></html>"
+<section><h2>Kết quả</h2><p class='ok'>Bản đã sửa: """+str(sum(x["safe"] for x in data["after"]))+"/"+str(len(data["after"]))+" ca đạt điều kiện kiểm tra.</p><p>Hai cột HTTP chỉ là tóm tắt; tệp JSON kèm trạng thái DB và log.</p><table><tr><th>Ca kiểm thử</th><th>HTTP v1</th><th>HTTP v2</th><th>Kết quả v2</th></tr>"+"".join(rows)+"</table></section><section><h2>Độ trễ mẫu</h2><p>p95 v1: "+str(data["latency"]["before"]["p95_ms"])+" ms · p95 v2: "+str(data["latency"]["after"]["p95_ms"])+" ms</p><p class='warn'>Đo trong cùng tiến trình, không dùng để kết luận hiệu năng production.</p></section><section><h2>Chạy lại</h2><p>Trong thư mục dự án: <code>python tests/demo.py</code>. API riêng: <code>docker compose up --build</code>, chỉ mở tại 127.0.0.1:8000.</p></section></html>"
 
 
 async def main():
@@ -196,11 +199,11 @@ async def main():
               f"p95 v1: {data['latency']['before']['p95_ms']} ms; p95 v2: {data['latency']['after']['p95_ms']} ms. Mỗi chế độ có 20 request làm nóng và 100 request đo, chạy qua ASGI trong cùng tiến trình.",
               "Số này chỉ mô tả lần chạy trên máy lab; cần tải thật qua HTTP, nhiều lần lặp và phần cứng cố định để kết luận overhead triển khai.", "",
               "## Minh chứng", "",
-              "- Mã lab: `app.py`, `compose.yaml`, `Dockerfile`.",
-              "- Ma trận quyền: `permission_matrix.csv`.",
-              "- Bộ test tự động: `demo.py`; báo cáo máy đọc: `results/junit.xml`.",
-              "- Request/response đã bỏ token, trạng thái DB và log từ chối có correlation ID: `results/before_after.json`.",
-              "- Đặc tả OpenAPI: `results/openapi.json`.",
+              "- Mã lab: `app/api.py`, `compose.yaml`, `Dockerfile`.",
+              "- Ma trận quyền: `app/policy/permission_matrix.csv`.",
+              "- Bộ test tự động: `tests/demo.py`; báo cáo máy đọc: `tests/results/junit.xml`.",
+              "- Request/response đã bỏ token, trạng thái DB và log từ chối có correlation ID: `tests/results/before_after.json`.",
+              "- Đặc tả OpenAPI: `tests/results/openapi.json`.",
               "- Hướng dẫn log và phạm vi đạo đức: `docs/LOGGING.md`, `docs/RULES_OF_ENGAGEMENT.md`.", "",
               "## Giới hạn", "",
               "Lab dùng dữ liệu trong bộ nhớ và issuer JWT giả; chưa tích hợp Keycloak, OPA, crAPI hoặc ZAP. Rate limit chỉ là bộ đếm trong tiến trình. Log chưa được đẩy tới kho append-only. JWT role có thể cũ sau khi đổi quyền; hành động admin đọc role hiện tại từ lab. Các giới hạn này phải được nêu khi bảo vệ, không thay bằng tuyên bố về hệ thống production."]

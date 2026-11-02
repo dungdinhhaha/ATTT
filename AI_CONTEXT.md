@@ -12,18 +12,18 @@
 - Không ghi token/khóa vào log, ảnh chụp, commit hoặc tài liệu chia sẻ.
 
 ## Cấu trúc và trạng thái dự án
-- `app.py`: FastAPI, chế độ before/fixed, JWT HS256 giả lập, middleware và policy trong ứng dụng.
-- `demo.py`: bộ test Python 23 tình huống, tạo kết quả JSON/HTML/OpenAPI/JUnit.
-- `live_demo.py`, `start_demo.ps1`: demo HTTP cục bộ.
-- `permission_matrix.csv`: 21 quy tắc phân quyền.
-- `policy/before/authorization.rego`: policy yếu để minh họa lỗi; không được Compose nạp. `policy/after/minibank.rego`: policy OPA sau sửa, được Compose mount.
-- `postman/`: collection BOLA trước/sau; Newman đã đạt 3/3 assertions mỗi collection, chưa đủ 23 ca.
-- `results/`: request/response đã khử bí mật, logs, số liệu và báo cáo thực nghiệm.
-- `THESIS/`: báo cáo Word/PDF; cần điền mã nhóm, thành viên, MSSV, giảng viên và ngành.
-- `docs/`: threat model, logging, phạm vi an toàn, hướng dẫn OPA/Newman.
+- `app/api.py`: FastAPI, chế độ before/fixed, JWT HS256 giả lập, middleware và policy trong ứng dụng.
+- `app/policy/`: ma trận quyền và policy OPA trước/sau sửa.
+- `tests/demo.py`: bộ test Python 23 tình huống, tạo kết quả JSON/HTML/OpenAPI/JUnit trong `tests/results/`.
+- `tests/live_demo.py`, `tests/start_demo.ps1`: demo HTTP cục bộ.
+- `tests/postman/`: collection BOLA trước/sau; Newman đã đạt 3/3 assertions mỗi collection, chưa đủ 23 ca.
+- `tests/results/`: request/response đã khử bí mật, logs, số liệu và báo cáo thực nghiệm.
+- `docs/reports/THESIS/`: báo cáo Word/PDF; cần điền mã nhóm, thành viên, MSSV, giảng viên và ngành.
+- `docs/guides/`: threat model, logging, phạm vi an toàn, hướng dẫn OPA/Newman.
+- `docs/planning/`: workbook kế hoạch nhóm.
 
 ## Kết quả đã kiểm chứng
-Lần chạy gần nhất của `python demo.py`: bản fixed đạt 23/23; p95 v1=4.254 ms, v2=6.976 ms. Đo bằng HTTPX ASGI cùng tiến trình, không suy ra hiệu năng production. Newman: 3/3 assertions cho mỗi collection BOLA. Cấu hình Compose hợp lệ; Docker Engine trên máy không kết nối được, do đó chưa tuyên bố container hoặc OPA runtime đã chạy thành công.
+Lần chạy gần nhất của `python tests/demo.py`: bản fixed đạt 23/23; p95 v1=4.254 ms, v2=6.976 ms. Đo bằng HTTPX ASGI cùng tiến trình, không suy ra hiệu năng production. Newman: 3/3 assertions cho mỗi collection BOLA. Cấu hình Compose hợp lệ; Docker Engine trên máy không kết nối được, do đó chưa tuyên bố container hoặc OPA runtime đã chạy thành công.
 
 ## Quy tắc khi AI hỗ trợ nhóm
 1. Kiểm tra `git status` và đọc file liên quan trước khi sửa; không ghi đè thay đổi của thành viên.
