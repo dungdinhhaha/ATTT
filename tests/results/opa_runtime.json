@@ -1,0 +1,23 @@
+{
+  "opa_data_api": {
+    "alice_owns_account": true,
+    "alice_reads_bob_account": false
+  },
+  "api_with_opa": {
+    "own_account": {
+      "status": 200,
+      "request_id": "c03aa4be-ec4b-44bd-ae33-16d6de487746"
+    },
+    "other_account": {
+      "status": 403,
+      "detail": "opa_denied",
+      "request_id": "47796d49-86f7-4218-a61a-0f1b5cc79b8e"
+    },
+    "support_admin_scope_but_wrong_role": {
+      "status": 403,
+      "detail": "opa_denied",
+      "request_id": "bdf20671-1620-4cea-a605-b3eeb20d0834"
+    }
+  },
+  "note": "Synthetic lab identities. Authorization tokens omitted."
+}

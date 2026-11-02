@@ -4,10 +4,11 @@ import base64
 import hashlib
 import hmac
 import json
+import math
 import os
 import time
 import uuid
-from collections import defaultdict
+from collections import defaultdict, deque
 
 import httpx
 
@@ -82,7 +83,8 @@ class Lab:
         self.tickets = {("sam", "alice")}
         self.transfers = []
         self.idempotency = {}
-        self.login_hits = defaultdict(int)
+        self.login_hits = defaultdict(deque)
+        self.login_clock = time.monotonic
         self.logs = []
         self.lock = asyncio.Lock()
 
@@ -244,9 +246,26 @@ def create_app(mode="fixed"):
     @app.post("/auth/login")
     async def login(request: Request):
         request.state.policy_id = "P-RATE"
-        lab.login_hits["local-lab"] += 1
-        if fixed and lab.login_hits["local-lab"] > 3:
-            return JSONResponse({"detail": "rate_limited"}, status_code=429, headers={"Retry-After": "60"})
+        try:
+            body = await request.json()
+        except (ValueError, UnicodeDecodeError):
+            body = {}
+        username = body.get("user", "") if isinstance(body, dict) else ""
+        if not isinstance(username, str): username = ""
+        # Use the connection address, not an untrusted forwarding header.
+        source = request.client.host if request.client else "unknown"
+        key = (source, username[:128].casefold())
+        if fixed:
+            async with lab.lock:
+                now = lab.login_clock()
+                hits = lab.login_hits[key]
+                while hits and now - hits[0] >= 60:
+                    hits.popleft()
+                if len(hits) >= 3:
+                    retry_after = max(1, math.ceil(60 - (now - hits[0])))
+                    return JSONResponse({"detail": "rate_limited"}, status_code=429,
+                                        headers={"Retry-After": str(retry_after)})
+                hits.append(now)
         raise HTTPException(401, "invalid_credentials")
 
     @app.get("/transfers")

@@ -4,7 +4,7 @@
 
 ## Chạy demo và xem kết quả
 
-Để trình bày trực tiếp trước lớp, xem `docs/guides/HUONG_DAN_DEMO.md` và chạy `tests/start_demo.ps1`. Script mở hai API lab, gửi request thật tới bản trước/sau, chạy 23 ca hồi quy và mở bảng kết quả.
+Để trình bày trực tiếp trước lớp, xem `docs/guides/HUONG_DAN_DEMO.md` và chạy `tests/start_demo.ps1`. Script mở hai API lab, gửi request thật tới bản trước/sau, chạy 26 ca hồi quy và mở bảng kết quả.
 
 Yêu cầu Python 3.12. Trong thư mục này:
 
@@ -18,10 +18,11 @@ Mở `tests/results/demo.html` để xem bảng trước/sau. `tests/results/bef
 ## Chạy API bằng Docker
 
 ```powershell
-docker compose up --build
+docker compose up -d --build
+python tests/verify_opa.py
 ```
 
-API chỉ bind `127.0.0.1:8000`; mặc định là bản đã sửa. Để tái hiện v1 trong lab, đặt `LAB_MODE=before` trước khi chạy Compose. Dừng bằng `docker compose down`.
+API chỉ bind `127.0.0.1:8000`; mặc định là bản đã sửa. Lệnh xác minh OPA lưu quyết định trực tiếp và phản hồi API đã khử token vào `tests/results/opa_runtime.json`. Để tái hiện v1 trong lab, đặt `LAB_MODE=before` trước khi chạy Compose. Dừng bằng `docker compose down`.
 
 ## Cấu trúc minh chứng
 
@@ -34,5 +35,5 @@ API chỉ bind `127.0.0.1:8000`; mặc định là bản đã sửa. Để tái 
 
 ## Giới hạn trung thực
 
-Đây là lab minh họa với dữ liệu trong bộ nhớ và JWT HS256 ký bằng khóa **giả, chỉ dùng trong lab**. Policy OPA có mã và cấu hình Compose nhưng chưa có kết quả runtime được xác minh trên máy. Keycloak, crAPI và ZAP chưa được triển khai. Số đo ASGI cùng tiến trình là phép đo mẫu để so sánh lab, không suy ra hiệu năng production. Kết quả chạy thực tế nằm trong `tests/results/`, không được thay bằng mục tiêu dự kiến trong kế hoạch.
+Đây là lab minh họa với dữ liệu trong bộ nhớ và JWT HS256 ký bằng khóa **giả, chỉ dùng trong lab**. OPA đã được xác minh trên Compose qua `tests/verify_opa.py`; bằng chứng nằm trong `tests/results/opa_runtime.json`. Rate limit dùng cửa sổ 60 giây theo địa chỉ kết nối và tài khoản, nhưng trạng thái vẫn chỉ nằm trong một tiến trình. Keycloak, crAPI và ZAP chưa được triển khai. Số đo ASGI cùng tiến trình là phép đo mẫu để so sánh lab, không suy ra hiệu năng production. Kết quả chạy thực tế nằm trong `tests/results/`.
 

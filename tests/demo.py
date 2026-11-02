@@ -24,7 +24,8 @@ REQUESTS = {
     "Customer hợp lệ": "GET /accounts/acc-a; actor=alice",
     "Không có token": "GET /accounts/acc-a; Authorization absent",
     "Sửa hồ sơ hợp lệ": "PATCH /profile/alice; body={phone:000-009}",
-    "BFLA support nâng role": "POST /admin/users/sam/role; actor=sam; body={role:admin}",
+    "BFLA support nâng role": "POST /admin/users/bob/role; actor=sam; scope=admin:users; body={role:admin}",
+    "Thiếu scope admin": "GET /admin/users; actor=sam; scope=support:read",
     "Admin hợp lệ": "POST /admin/users/bob/role; actor=admin; MFA=true",
     "Admin thiếu MFA": "POST /admin/users/bob/role; actor=admin; MFA=false",
     "Admin tự nâng quyền": "POST /admin/users/admin/role; actor=admin; MFA=true",
@@ -36,6 +37,8 @@ REQUESTS = {
     "Chia nhỏ vượt hạn mức": "POST /transfers x4; distinct keys; amount=20 each",
     "Giới hạn đăng nhập": "POST /auth/login x5; synthetic invalid credentials",
     "Đăng nhập dưới ngưỡng": "POST /auth/login x3; synthetic invalid credentials",
+    "Rate limit tách tài khoản": "POST /auth/login x4 for alice, then x1 for bob",
+    "Rate limit hết cửa sổ": "POST /auth/login x4 for alice, advance lab clock 60s, retry",
     "Giới hạn page size": "GET /transfers?limit=1000000",
     "JWT sai audience": "GET /accounts/acc-a; signed lab JWT aud=other-service",
     "JWT hết hạn": "GET /accounts/acc-a; signed lab JWT exp in past",
@@ -71,8 +74,11 @@ async def one(mode, case):
             r = await c.patch("/profile/alice", json={"phone": "000-009"}, headers=auth("alice"))
             safe = r.status_code == 200 and lab.profiles["alice"]["phone"] == "000-009"
         elif case == "BFLA support nâng role":
-            r = await c.post("/admin/users/sam/role", json={"role": "admin"}, headers=auth("sam", "support", "support:read"))
-            safe = r.status_code == 403 and lab.profiles["sam"]["role"] == "support"
+            r = await c.post("/admin/users/bob/role", json={"role": "admin"}, headers=auth("sam", "support", "admin:users"))
+            safe = r.status_code == 403 and r.json().get("detail") == "forbidden" and lab.profiles["bob"]["role"] == "customer"
+        elif case == "Thiếu scope admin":
+            r = await c.get("/admin/users", headers=auth("sam", "support", "support:read"))
+            safe = r.status_code == 403 and r.json().get("detail") == "missing_scope"
         elif case == "Admin hợp lệ":
             r = await c.post("/admin/users/bob/role", json={"role": "support"}, headers=auth("admin", "admin", "admin:users", mfa=True))
             safe = r.status_code == 200 and lab.profiles["bob"]["role"] == "support"
@@ -115,6 +121,15 @@ async def one(mode, case):
         elif case == "Đăng nhập dưới ngưỡng":
             for _ in range(3): r = await c.post("/auth/login", json={"user": "lab", "password": "fake"})
             safe = r.status_code == 401
+        elif case == "Rate limit tách tài khoản":
+            for _ in range(4): blocked = await c.post("/auth/login", json={"user": "alice", "password": "fake"})
+            r = await c.post("/auth/login", json={"user": "bob", "password": "fake"})
+            safe = blocked.status_code == 429 and r.status_code == 401
+        elif case == "Rate limit hết cửa sổ":
+            for _ in range(4): blocked = await c.post("/auth/login", json={"user": "alice", "password": "fake"})
+            lab.login_clock = lambda: time.monotonic() + 61
+            r = await c.post("/auth/login", json={"user": "alice", "password": "fake"})
+            safe = blocked.status_code == 429 and r.status_code == 401
         elif case == "Giới hạn page size":
             r = await c.get("/transfers?limit=1000000", headers=auth("alice"))
             safe = r.status_code == 400
@@ -142,9 +157,9 @@ async def one(mode, case):
 
 
 CASES = ["BOLA support ngoài ticket", "Support có ticket", "BOLA customer", "Customer hợp lệ",
-         "Không có token", "Sửa hồ sơ hợp lệ", "BFLA support nâng role", "Admin hợp lệ", "Admin thiếu MFA", "Admin tự nâng quyền", "Mass assignment",
+         "Không có token", "Sửa hồ sơ hợp lệ", "BFLA support nâng role", "Thiếu scope admin", "Admin hợp lệ", "Admin thiếu MFA", "Admin tự nâng quyền", "Mass assignment",
          "Chuyển từ tài khoản khác", "Gửi lặp giao dịch", "Gửi song song cùng key", "Cùng key khác nội dung", "Chia nhỏ vượt hạn mức",
-         "Giới hạn đăng nhập", "Đăng nhập dưới ngưỡng", "Giới hạn page size", "JWT sai audience", "JWT hết hạn", "Agent không được ghi", "Log có ID, không lộ token"]
+         "Giới hạn đăng nhập", "Đăng nhập dưới ngưỡng", "Rate limit tách tài khoản", "Rate limit hết cửa sổ", "Giới hạn page size", "JWT sai audience", "JWT hết hạn", "Agent không được ghi", "Log có ID, không lộ token"]
 
 
 async def latency(mode):
@@ -206,7 +221,7 @@ async def main():
               "- Đặc tả OpenAPI: `tests/results/openapi.json`.",
               "- Hướng dẫn log và phạm vi đạo đức: `docs/LOGGING.md`, `docs/RULES_OF_ENGAGEMENT.md`.", "",
               "## Giới hạn", "",
-              "Lab dùng dữ liệu trong bộ nhớ và issuer JWT giả; chưa tích hợp Keycloak, OPA, crAPI hoặc ZAP. Rate limit chỉ là bộ đếm trong tiến trình. Log chưa được đẩy tới kho append-only. JWT role có thể cũ sau khi đổi quyền; hành động admin đọc role hiện tại từ lab. Các giới hạn này phải được nêu khi bảo vệ, không thay bằng tuyên bố về hệ thống production."]
+              "Lab dùng dữ liệu trong bộ nhớ và issuer JWT giả; chưa tích hợp Keycloak, crAPI hoặc ZAP. OPA đã được xác minh riêng qua Compose, xem `tests/results/opa_runtime.json`; bộ ASGI này không bật OPA. Rate limit có cửa sổ 60 giây theo địa chỉ kết nối và tài khoản nhưng trạng thái chỉ nằm trong một tiến trình. Log chưa được đẩy tới kho append-only. JWT role có thể cũ sau khi đổi quyền; hành động admin đọc role hiện tại từ lab."]
     (OUT/"REPORT.md").write_text("\n".join(lines)+"\n", encoding="utf-8")
     print(f"v2: {sum(x['safe'] for x in data['after'])}/{len(CASES)} ca đạt; p95 v1={data['latency']['before']['p95_ms']}ms, v2={data['latency']['after']['p95_ms']}ms")
     for b,a in zip(data["before"],data["after"]): print(f"{a['case']}: {b['status']} -> {a['status']} | {'ĐẠT' if a['safe'] else 'CHƯA ĐẠT'}")

@@ -20,3 +20,6 @@ P18,customer,GET,/accounts/{id},wrong_audience_or_expired,deny,-,JWT sai audienc
 P19,admin,POST,/admin/users/{self}/role,self_change,deny,admin:users,Admin tự nâng quyền
 P20,agent,POST,/transfers,read_only_scope,deny,accounts:read,Agent không được ghi
 P21,anonymous,POST,/auth/login,at_or_below_3_attempts,allow_attempt,-,Đăng nhập dưới ngưỡng
+P22,support,GET,/admin/users,missing_admin_scope,deny,-,Thiếu scope admin
+P23,anonymous,POST,/auth/login,different_account_same_source_independent_window,allow_attempt,-,Rate limit tách tài khoản
+P24,anonymous,POST,/auth/login,60_second_window_elapsed,allow_attempt,-,Rate limit hết cửa sổ

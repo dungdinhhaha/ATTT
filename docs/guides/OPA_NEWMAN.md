@@ -15,5 +15,5 @@ npx --yes newman run tests/postman/De_tai_27_BOLA_before.postman_collection.json
 npx --yes newman run tests/postman/De_tai_27_BOLA_after.postman_collection.json --reporters cli,junit --reporter-junit-export tests/results/newman_bola_after.xml
 ```
 
-Hai collection này chỉ minh họa BOLA và truy cập hợp lệ. Bộ Python `tests/demo.py` bao phủ 23 tình huống với trạng thái lab mới cho từng ca. Không báo cáo Postman là bộ kiểm thử 23 ca.
+Hai collection này chỉ minh họa BOLA và truy cập hợp lệ. Bộ Python `tests/demo.py` bao phủ 26 tình huống với trạng thái lab mới cho từng ca. Không báo cáo Postman là bộ kiểm thử 26 ca. Để xác minh OPA chạy thật, dùng `docker compose up -d --build` rồi `python tests/verify_opa.py`; minh chứng đã khử token nằm ở `tests/results/opa_runtime.json`.
 

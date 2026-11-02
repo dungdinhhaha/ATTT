@@ -49,5 +49,5 @@ Các kiểm tra token, schema, rate limit, idempotency và hạn mức vẫn n�
 
 ## Trạng thái xác minh
 
-Policy Rego và cấu hình Compose đã có trong repo; Docker Engine trên máy chưa chạy được ở lần kiểm tra gần nhất. Không xem đây là bằng chứng OPA runtime đã được kiểm nghiệm. Bộ Python 23 ca kiểm tra policy trong ứng dụng, không gọi OPA khi `OPA_URL` chưa đặt.
+Policy Rego đã được xác minh với OPA chạy trong Compose. Chạy `docker compose up -d --build`, rồi `python tests/verify_opa.py`; xem quyết định trực tiếp và phản hồi API trong `tests/results/opa_runtime.json`. Bộ Python 26 ca kiểm tra policy trong ứng dụng, không gọi OPA khi `OPA_URL` chưa đặt.
 

@@ -13,6 +13,7 @@ services:
       - /tmp
     networks:
       - lab
+      - demo
   opa:
     image: openpolicyagent/opa:1.9.0
     command: ["run", "--server", "--addr", "0.0.0.0:8181", "/policy/minibank.rego"]
@@ -24,3 +25,4 @@ services:
 networks:
   lab:
     internal: true
+  demo:

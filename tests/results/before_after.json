@@ -5,7 +5,7 @@
       "request": "GET /support/accounts/acc-b; actor=sam; scope=support:read",
       "status": 200,
       "safe": false,
-      "request_id": "233302ed-896a-492d-8a1e-6222e3860735",
+      "request_id": "b0b8c5a4-357e-4ca8-a507-45d813fb06f8",
       "response": {
         "id": "acc-b",
         "owner": "bob",
@@ -20,14 +20,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "233302ed-896a-492d-8a1e-6222e3860735",
+        "request_id": "b0b8c5a4-357e-4ca8-a507-45d813fb06f8",
         "subject": "sam",
         "method": "GET",
         "route": "/support/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P08/P14",
         "status": 200,
-        "duration_ms": 2.695
+        "duration_ms": 1.984
       }
     },
     {
@@ -35,7 +35,7 @@
       "request": "GET /support/accounts/acc-a; actor=sam; scope=support:read",
       "status": 200,
       "safe": false,
-      "request_id": "85ad3adb-c856-4ea9-b760-879a0b5b6bc1",
+      "request_id": "8cbbb272-48aa-47c4-9389-5d577d91c4aa",
       "response": {
         "id": "acc-a",
         "owner": "alice",
@@ -50,14 +50,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "85ad3adb-c856-4ea9-b760-879a0b5b6bc1",
+        "request_id": "8cbbb272-48aa-47c4-9389-5d577d91c4aa",
         "subject": "sam",
         "method": "GET",
         "route": "/support/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P08/P14",
         "status": 200,
-        "duration_ms": 1.013
+        "duration_ms": 0.669
       }
     },
     {
@@ -65,7 +65,7 @@
       "request": "GET /accounts/acc-b; actor=alice",
       "status": 200,
       "safe": false,
-      "request_id": "5c953d35-b1f9-4279-9dce-705f0f0c8fd2",
+      "request_id": "36ee6d01-cbc9-47ad-b2b7-fa03537a98ef",
       "response": {
         "id": "acc-b",
         "balance": 100,
@@ -80,14 +80,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "5c953d35-b1f9-4279-9dce-705f0f0c8fd2",
+        "request_id": "36ee6d01-cbc9-47ad-b2b7-fa03537a98ef",
         "subject": "alice",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P02",
         "status": 200,
-        "duration_ms": 1.66
+        "duration_ms": 0.614
       }
     },
     {
@@ -95,7 +95,7 @@
       "request": "GET /accounts/acc-a; actor=alice",
       "status": 200,
       "safe": true,
-      "request_id": "d5c02283-020f-4cf9-badb-5a5322cd64fa",
+      "request_id": "25b02012-d836-40ea-b225-5b2a718603e4",
       "response": {
         "id": "acc-a",
         "balance": 100,
@@ -110,14 +110,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "d5c02283-020f-4cf9-badb-5a5322cd64fa",
+        "request_id": "25b02012-d836-40ea-b225-5b2a718603e4",
         "subject": "alice",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P02",
         "status": 200,
-        "duration_ms": 0.836
+        "duration_ms": 0.463
       }
     },
     {
@@ -125,7 +125,7 @@
       "request": "GET /accounts/acc-a; Authorization absent",
       "status": 401,
       "safe": true,
-      "request_id": "10aa503a-ec54-4c01-a740-e6ef07ec4b1e",
+      "request_id": "e8282896-92c4-460d-84f5-a98300809665",
       "response": {
         "detail": "missing_token"
       },
@@ -138,14 +138,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "10aa503a-ec54-4c01-a740-e6ef07ec4b1e",
+        "request_id": "e8282896-92c4-460d-84f5-a98300809665",
         "subject": "anonymous",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "deny",
         "policy_id": "P-DEFAULT",
         "status": 401,
-        "duration_ms": 0.929
+        "duration_ms": 0.503
       }
     },
     {
@@ -153,7 +153,7 @@
       "request": "PATCH /profile/alice; body={phone:000-009}",
       "status": 200,
       "safe": true,
-      "request_id": "333318af-4dd6-41bd-8a99-137fd59dcc92",
+      "request_id": "4f4c6c51-527b-485b-8d59-55b1d0bf3cbf",
       "response": {
         "full_name": "Alice Lab",
         "phone": "000-009",
@@ -168,24 +168,24 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "333318af-4dd6-41bd-8a99-137fd59dcc92",
+        "request_id": "4f4c6c51-527b-485b-8d59-55b1d0bf3cbf",
         "subject": "alice",
         "method": "PATCH",
         "route": "/profile/{user_id}",
         "decision": "allow",
         "policy_id": "P06",
         "status": 200,
-        "duration_ms": 2.365
+        "duration_ms": 0.999
       }
     },
     {
       "case": "BFLA support nâng role",
-      "request": "POST /admin/users/sam/role; actor=sam; body={role:admin}",
+      "request": "POST /admin/users/bob/role; actor=sam; scope=admin:users; body={role:admin}",
       "status": 200,
       "safe": false,
-      "request_id": "b9576d3a-3dea-4d7b-ad60-9b41db8afc8a",
+      "request_id": "c3313673-a2a3-4b46-9d4b-8f9db676ada5",
       "response": {
-        "user_id": "sam",
+        "user_id": "bob",
         "role": "admin"
       },
       "db": {
@@ -194,17 +194,48 @@
           "acc-b": 100
         },
         "transfer_count": 0,
-        "sam_role": "admin"
+        "sam_role": "support"
       },
       "log": {
-        "request_id": "b9576d3a-3dea-4d7b-ad60-9b41db8afc8a",
+        "request_id": "c3313673-a2a3-4b46-9d4b-8f9db676ada5",
         "subject": "sam",
         "method": "POST",
         "route": "/admin/users/{user_id}/role",
         "decision": "allow",
         "policy_id": "P10/P15/P17",
         "status": 200,
-        "duration_ms": 1.999
+        "duration_ms": 1.901
+      }
+    },
+    {
+      "case": "Thiếu scope admin",
+      "request": "GET /admin/users; actor=sam; scope=support:read",
+      "status": 200,
+      "safe": false,
+      "request_id": "63f78dba-ea5f-4206-86e3-db780ab9a382",
+      "response": [
+        "admin",
+        "alice",
+        "bob",
+        "sam"
+      ],
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "63f78dba-ea5f-4206-86e3-db780ab9a382",
+        "subject": "sam",
+        "method": "GET",
+        "route": "/admin/users",
+        "decision": "allow",
+        "policy_id": "P07",
+        "status": 200,
+        "duration_ms": 0.568
       }
     },
     {
@@ -212,7 +243,7 @@
       "request": "POST /admin/users/bob/role; actor=admin; MFA=true",
       "status": 200,
       "safe": true,
-      "request_id": "0e6e36d7-dca1-46c4-a5b1-ad7509de1349",
+      "request_id": "1d551021-cf11-4218-8571-fe9888174baf",
       "response": {
         "user_id": "bob",
         "role": "support"
@@ -226,14 +257,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "0e6e36d7-dca1-46c4-a5b1-ad7509de1349",
+        "request_id": "1d551021-cf11-4218-8571-fe9888174baf",
         "subject": "admin",
         "method": "POST",
         "route": "/admin/users/{user_id}/role",
         "decision": "allow",
         "policy_id": "P10/P15/P17",
         "status": 200,
-        "duration_ms": 2.41
+        "duration_ms": 1.033
       }
     },
     {
@@ -241,7 +272,7 @@
       "request": "POST /admin/users/bob/role; actor=admin; MFA=false",
       "status": 200,
       "safe": false,
-      "request_id": "4e43ad1b-ef36-4d74-b730-3136dff50a8a",
+      "request_id": "d82b62ae-6187-462a-8c14-2538d5b82456",
       "response": {
         "user_id": "bob",
         "role": "support"
@@ -255,14 +286,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "4e43ad1b-ef36-4d74-b730-3136dff50a8a",
+        "request_id": "d82b62ae-6187-462a-8c14-2538d5b82456",
         "subject": "admin",
         "method": "POST",
         "route": "/admin/users/{user_id}/role",
         "decision": "allow",
         "policy_id": "P10/P15/P17",
         "status": 200,
-        "duration_ms": 2.966
+        "duration_ms": 1.752
       }
     },
     {
@@ -270,7 +301,7 @@
       "request": "POST /admin/users/admin/role; actor=admin; MFA=true",
       "status": 200,
       "safe": false,
-      "request_id": "72b75af9-b4fb-40af-bc6b-807812bb9fb3",
+      "request_id": "d371c0d9-63c3-4c13-a1f5-b9356da56867",
       "response": {
         "user_id": "admin",
         "role": "support"
@@ -284,14 +315,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "72b75af9-b4fb-40af-bc6b-807812bb9fb3",
+        "request_id": "d371c0d9-63c3-4c13-a1f5-b9356da56867",
         "subject": "admin",
         "method": "POST",
         "route": "/admin/users/{user_id}/role",
         "decision": "allow",
         "policy_id": "P10/P15/P17",
         "status": 200,
-        "duration_ms": 1.628
+        "duration_ms": 1.834
       }
     },
     {
@@ -299,7 +330,7 @@
       "request": "PATCH /profile/alice; body={role:admin}",
       "status": 200,
       "safe": false,
-      "request_id": "88929ec8-799f-4b6b-a478-725a9405ea74",
+      "request_id": "7c36d958-191a-4b01-905c-d364b4bdcec4",
       "response": {
         "full_name": "Alice Lab",
         "phone": "000-001",
@@ -314,14 +345,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "88929ec8-799f-4b6b-a478-725a9405ea74",
+        "request_id": "7c36d958-191a-4b01-905c-d364b4bdcec4",
         "subject": "alice",
         "method": "PATCH",
         "route": "/profile/{user_id}",
         "decision": "allow",
         "policy_id": "P06",
         "status": 200,
-        "duration_ms": 1.99
+        "duration_ms": 1.355
       }
     },
     {
@@ -329,7 +360,7 @@
       "request": "POST /transfers; actor=alice; source=acc-b; amount=10",
       "status": 200,
       "safe": false,
-      "request_id": "1c4c9b3b-82c5-4bce-96b1-4692dfc5c787",
+      "request_id": "c72a4669-1a3c-481a-98ea-bdc93abdf64f",
       "response": {
         "id": "tr-1",
         "source": "acc-b",
@@ -345,14 +376,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "1c4c9b3b-82c5-4bce-96b1-4692dfc5c787",
+        "request_id": "c72a4669-1a3c-481a-98ea-bdc93abdf64f",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "allow",
         "policy_id": "P04/P05",
         "status": 200,
-        "duration_ms": 4.702
+        "duration_ms": 2.779
       }
     },
     {
@@ -360,7 +391,7 @@
       "request": "POST /transfers x5; same Idempotency-Key; amount=10",
       "status": 200,
       "safe": false,
-      "request_id": "204f3c1e-0627-449a-bcd9-620ab35d2b00",
+      "request_id": "7627c9a1-2f56-4021-99af-dd46f3694ff4",
       "response": {
         "id": "tr-5",
         "source": "acc-a",
@@ -376,14 +407,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "204f3c1e-0627-449a-bcd9-620ab35d2b00",
+        "request_id": "7627c9a1-2f56-4021-99af-dd46f3694ff4",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "allow",
         "policy_id": "P04/P05",
         "status": 200,
-        "duration_ms": 1.685
+        "duration_ms": 0.612
       }
     },
     {
@@ -391,7 +422,7 @@
       "request": "POST /transfers x20 concurrent; same Idempotency-Key; amount=10",
       "status": 400,
       "safe": false,
-      "request_id": "9173b293-2a8c-4d24-9fe2-611acb7209e3",
+      "request_id": "4aed6b28-3740-45e5-83c8-e9dfccd75d75",
       "response": {
         "detail": "insufficient_funds"
       },
@@ -404,14 +435,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "9173b293-2a8c-4d24-9fe2-611acb7209e3",
+        "request_id": "4aed6b28-3740-45e5-83c8-e9dfccd75d75",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "deny",
         "policy_id": "P04/P05",
         "status": 400,
-        "duration_ms": 23.386
+        "duration_ms": 12.32
       }
     },
     {
@@ -419,7 +450,7 @@
       "request": "POST /transfers x2; same key; amount=10 then 20",
       "status": 200,
       "safe": false,
-      "request_id": "00b2f437-a892-40dc-8838-ed91d45c2d22",
+      "request_id": "ef65675a-16f5-43d3-838b-089308bee225",
       "response": {
         "id": "tr-2",
         "source": "acc-a",
@@ -435,14 +466,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "00b2f437-a892-40dc-8838-ed91d45c2d22",
+        "request_id": "ef65675a-16f5-43d3-838b-089308bee225",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "allow",
         "policy_id": "P04/P05",
         "status": 200,
-        "duration_ms": 2.882
+        "duration_ms": 1.161
       }
     },
     {
@@ -450,7 +481,7 @@
       "request": "POST /transfers x4; distinct keys; amount=20 each",
       "status": 200,
       "safe": false,
-      "request_id": "ee681f75-fda8-4dc0-9e48-a5d668382711",
+      "request_id": "c69c9dd0-639b-4902-95da-74d2817c45ad",
       "response": {
         "id": "tr-4",
         "source": "acc-a",
@@ -466,14 +497,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "ee681f75-fda8-4dc0-9e48-a5d668382711",
+        "request_id": "c69c9dd0-639b-4902-95da-74d2817c45ad",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "allow",
         "policy_id": "P04/P05",
         "status": 200,
-        "duration_ms": 2.555
+        "duration_ms": 0.793
       }
     },
     {
@@ -481,7 +512,7 @@
       "request": "POST /auth/login x5; synthetic invalid credentials",
       "status": 401,
       "safe": false,
-      "request_id": "49835855-70b7-49e1-8949-4321ae38cbde",
+      "request_id": "fd40f003-a359-49a5-9671-8f85e0544740",
       "response": {
         "detail": "invalid_credentials"
       },
@@ -494,14 +525,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "49835855-70b7-49e1-8949-4321ae38cbde",
+        "request_id": "fd40f003-a359-49a5-9671-8f85e0544740",
         "subject": "anonymous",
         "method": "POST",
         "route": "/auth/login",
         "decision": "deny",
         "policy_id": "P-RATE",
         "status": 401,
-        "duration_ms": 0.773
+        "duration_ms": 0.654
       }
     },
     {
@@ -509,7 +540,7 @@
       "request": "POST /auth/login x3; synthetic invalid credentials",
       "status": 401,
       "safe": true,
-      "request_id": "8e725f8c-d12d-4cd5-b019-0649521df7af",
+      "request_id": "7a50c661-7b7d-46b1-a1fa-2a646ffd75b2",
       "response": {
         "detail": "invalid_credentials"
       },
@@ -522,14 +553,70 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "8e725f8c-d12d-4cd5-b019-0649521df7af",
+        "request_id": "7a50c661-7b7d-46b1-a1fa-2a646ffd75b2",
         "subject": "anonymous",
         "method": "POST",
         "route": "/auth/login",
         "decision": "deny",
         "policy_id": "P-RATE",
         "status": 401,
-        "duration_ms": 0.712
+        "duration_ms": 0.57
+      }
+    },
+    {
+      "case": "Rate limit tách tài khoản",
+      "request": "POST /auth/login x4 for alice, then x1 for bob",
+      "status": 401,
+      "safe": false,
+      "request_id": "9e19c11f-a980-44c5-b738-182206ec4274",
+      "response": {
+        "detail": "invalid_credentials"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "9e19c11f-a980-44c5-b738-182206ec4274",
+        "subject": "anonymous",
+        "method": "POST",
+        "route": "/auth/login",
+        "decision": "deny",
+        "policy_id": "P-RATE",
+        "status": 401,
+        "duration_ms": 0.929
+      }
+    },
+    {
+      "case": "Rate limit hết cửa sổ",
+      "request": "POST /auth/login x4 for alice, advance lab clock 60s, retry",
+      "status": 401,
+      "safe": false,
+      "request_id": "9fcc1a7d-beb6-43ae-a60c-e8b013720f9e",
+      "response": {
+        "detail": "invalid_credentials"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "9fcc1a7d-beb6-43ae-a60c-e8b013720f9e",
+        "subject": "anonymous",
+        "method": "POST",
+        "route": "/auth/login",
+        "decision": "deny",
+        "policy_id": "P-RATE",
+        "status": 401,
+        "duration_ms": 0.836
       }
     },
     {
@@ -537,7 +624,7 @@
       "request": "GET /transfers?limit=1000000",
       "status": 200,
       "safe": false,
-      "request_id": "9814943a-0d38-4b43-9778-c12bd637799b",
+      "request_id": "b7a96c3e-6a79-4c27-9227-035a4caba16d",
       "response": [],
       "db": {
         "balances": {
@@ -548,14 +635,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "9814943a-0d38-4b43-9778-c12bd637799b",
+        "request_id": "b7a96c3e-6a79-4c27-9227-035a4caba16d",
         "subject": "alice",
         "method": "GET",
         "route": "/transfers",
         "decision": "allow",
         "policy_id": "P-LIMIT",
         "status": 200,
-        "duration_ms": 2.933
+        "duration_ms": 1.957
       }
     },
     {
@@ -563,7 +650,7 @@
       "request": "GET /accounts/acc-a; signed lab JWT aud=other-service",
       "status": 200,
       "safe": false,
-      "request_id": "b5e77b5e-aaa9-4467-87ef-6b1dfca0989b",
+      "request_id": "b0e0a2bd-0c15-48bc-928f-de90563e6ae8",
       "response": {
         "id": "acc-a",
         "balance": 100,
@@ -578,14 +665,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "b5e77b5e-aaa9-4467-87ef-6b1dfca0989b",
+        "request_id": "b0e0a2bd-0c15-48bc-928f-de90563e6ae8",
         "subject": "alice",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P02",
         "status": 200,
-        "duration_ms": 1.232
+        "duration_ms": 0.826
       }
     },
     {
@@ -593,7 +680,7 @@
       "request": "GET /accounts/acc-a; signed lab JWT exp in past",
       "status": 200,
       "safe": false,
-      "request_id": "f23cd228-81fa-4b1d-9634-c01f86b36266",
+      "request_id": "650f9581-0fb4-4013-829d-ae4ac02700e7",
       "response": {
         "id": "acc-a",
         "balance": 100,
@@ -608,14 +695,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "f23cd228-81fa-4b1d-9634-c01f86b36266",
+        "request_id": "650f9581-0fb4-4013-829d-ae4ac02700e7",
         "subject": "alice",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P02",
         "status": 200,
-        "duration_ms": 1.282
+        "duration_ms": 0.565
       }
     },
     {
@@ -623,7 +710,7 @@
       "request": "POST /transfers; actor=agent; read-only scope",
       "status": 200,
       "safe": false,
-      "request_id": "aa7e52e9-fed1-4dd9-bce3-3911dd843ec5",
+      "request_id": "5a511050-3bb9-4f3a-be94-02cf7afaba04",
       "response": {
         "id": "tr-1",
         "source": "acc-a",
@@ -639,14 +726,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "aa7e52e9-fed1-4dd9-bce3-3911dd843ec5",
+        "request_id": "5a511050-3bb9-4f3a-be94-02cf7afaba04",
         "subject": "agent",
         "method": "POST",
         "route": "/transfers",
         "decision": "allow",
         "policy_id": "P04/P05",
         "status": 200,
-        "duration_ms": 3.536
+        "duration_ms": 1.297
       }
     },
     {
@@ -654,7 +741,7 @@
       "request": "GET /accounts/acc-b; actor=alice; inspect X-Request-ID and log",
       "status": 200,
       "safe": true,
-      "request_id": "470cabf2-d560-4760-b73c-615275983c4f",
+      "request_id": "37cd626b-3523-47a3-b170-0539d6f5a157",
       "response": {
         "id": "acc-b",
         "balance": 100,
@@ -669,14 +756,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "470cabf2-d560-4760-b73c-615275983c4f",
+        "request_id": "37cd626b-3523-47a3-b170-0539d6f5a157",
         "subject": "alice",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P02",
         "status": 200,
-        "duration_ms": 1.624
+        "duration_ms": 0.84
       }
     }
   ],
@@ -686,7 +773,7 @@
       "request": "GET /support/accounts/acc-b; actor=sam; scope=support:read",
       "status": 403,
       "safe": true,
-      "request_id": "3361d425-d945-49af-aeda-de3e53d61bc1",
+      "request_id": "76ad1c20-9a62-4fae-bece-0c79d9f099c2",
       "response": {
         "detail": "ticket_required"
       },
@@ -699,14 +786,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "3361d425-d945-49af-aeda-de3e53d61bc1",
+        "request_id": "76ad1c20-9a62-4fae-bece-0c79d9f099c2",
         "subject": "sam",
         "method": "GET",
         "route": "/support/accounts/{account_id}",
         "decision": "deny",
         "policy_id": "P08/P14",
         "status": 403,
-        "duration_ms": 1.699
+        "duration_ms": 1.131
       }
     },
     {
@@ -714,7 +801,7 @@
       "request": "GET /support/accounts/acc-a; actor=sam; scope=support:read",
       "status": 200,
       "safe": true,
-      "request_id": "0ecc15c0-93d9-40d5-8b1e-febddd0cb7fe",
+      "request_id": "c41e6292-84c9-4d8f-a287-bd178982f6fd",
       "response": {
         "id": "acc-a",
         "owner": "alice",
@@ -729,14 +816,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "0ecc15c0-93d9-40d5-8b1e-febddd0cb7fe",
+        "request_id": "c41e6292-84c9-4d8f-a287-bd178982f6fd",
         "subject": "sam",
         "method": "GET",
         "route": "/support/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P08/P14",
         "status": 200,
-        "duration_ms": 1.618
+        "duration_ms": 1.922
       }
     },
     {
@@ -744,7 +831,7 @@
       "request": "GET /accounts/acc-b; actor=alice",
       "status": 403,
       "safe": true,
-      "request_id": "63df9466-e4af-4b29-8e64-f84685025b67",
+      "request_id": "f128d59e-4206-4354-bba7-e8fb4fd0be11",
       "response": {
         "detail": "forbidden"
       },
@@ -757,14 +844,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "63df9466-e4af-4b29-8e64-f84685025b67",
+        "request_id": "f128d59e-4206-4354-bba7-e8fb4fd0be11",
         "subject": "alice",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "deny",
         "policy_id": "P02",
         "status": 403,
-        "duration_ms": 2.239
+        "duration_ms": 0.687
       }
     },
     {
@@ -772,7 +859,7 @@
       "request": "GET /accounts/acc-a; actor=alice",
       "status": 200,
       "safe": true,
-      "request_id": "8ab78136-ca45-4ee5-a249-c64cbcbcf288",
+      "request_id": "4f90167c-75ce-457f-b193-8dd8f77da703",
       "response": {
         "id": "acc-a",
         "balance": 100,
@@ -787,14 +874,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "8ab78136-ca45-4ee5-a249-c64cbcbcf288",
+        "request_id": "4f90167c-75ce-457f-b193-8dd8f77da703",
         "subject": "alice",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "allow",
         "policy_id": "P02",
         "status": 200,
-        "duration_ms": 1.515
+        "duration_ms": 0.524
       }
     },
     {
@@ -802,7 +889,7 @@
       "request": "GET /accounts/acc-a; Authorization absent",
       "status": 401,
       "safe": true,
-      "request_id": "5b5d16b2-b963-49da-8727-41a4e6b3a0b3",
+      "request_id": "c8854ebb-f928-4153-ab61-0a962c79d062",
       "response": {
         "detail": "missing_token"
       },
@@ -815,14 +902,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "5b5d16b2-b963-49da-8727-41a4e6b3a0b3",
+        "request_id": "c8854ebb-f928-4153-ab61-0a962c79d062",
         "subject": "anonymous",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "deny",
         "policy_id": "P-DEFAULT",
         "status": 401,
-        "duration_ms": 1.237
+        "duration_ms": 0.72
       }
     },
     {
@@ -830,7 +917,7 @@
       "request": "PATCH /profile/alice; body={phone:000-009}",
       "status": 200,
       "safe": true,
-      "request_id": "337147b9-b636-4e39-9a24-59b2e026bdfa",
+      "request_id": "bbce8bfe-74b7-4df1-b264-589f0bbe1e7a",
       "response": {
         "full_name": "Alice Lab",
         "phone": "000-009",
@@ -845,22 +932,50 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "337147b9-b636-4e39-9a24-59b2e026bdfa",
+        "request_id": "bbce8bfe-74b7-4df1-b264-589f0bbe1e7a",
         "subject": "alice",
         "method": "PATCH",
         "route": "/profile/{user_id}",
         "decision": "allow",
         "policy_id": "P06",
         "status": 200,
-        "duration_ms": 4.031
+        "duration_ms": 1.646
       }
     },
     {
       "case": "BFLA support nâng role",
-      "request": "POST /admin/users/sam/role; actor=sam; body={role:admin}",
+      "request": "POST /admin/users/bob/role; actor=sam; scope=admin:users; body={role:admin}",
       "status": 403,
       "safe": true,
-      "request_id": "681afc04-a91d-4d03-a795-706e14c59540",
+      "request_id": "54acb882-1282-462f-94c2-dd9f2c249577",
+      "response": {
+        "detail": "forbidden"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "54acb882-1282-462f-94c2-dd9f2c249577",
+        "subject": "sam",
+        "method": "POST",
+        "route": "/admin/users/{user_id}/role",
+        "decision": "deny",
+        "policy_id": "P10/P15/P17",
+        "status": 403,
+        "duration_ms": 0.858
+      }
+    },
+    {
+      "case": "Thiếu scope admin",
+      "request": "GET /admin/users; actor=sam; scope=support:read",
+      "status": 403,
+      "safe": true,
+      "request_id": "4c43d010-ad22-42ca-9dfe-e578e9393bec",
       "response": {
         "detail": "missing_scope"
       },
@@ -873,14 +988,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "681afc04-a91d-4d03-a795-706e14c59540",
+        "request_id": "4c43d010-ad22-42ca-9dfe-e578e9393bec",
         "subject": "sam",
-        "method": "POST",
-        "route": "/admin/users/{user_id}/role",
+        "method": "GET",
+        "route": "/admin/users",
         "decision": "deny",
         "policy_id": "P-DEFAULT",
         "status": 403,
-        "duration_ms": 1.263
+        "duration_ms": 0.556
       }
     },
     {
@@ -888,7 +1003,7 @@
       "request": "POST /admin/users/bob/role; actor=admin; MFA=true",
       "status": 200,
       "safe": true,
-      "request_id": "c722cb7d-f697-49fa-8d1f-8e3ad6bb8b2a",
+      "request_id": "91fcadf4-49aa-4549-a461-0f5c09549adf",
       "response": {
         "user_id": "bob",
         "role": "support"
@@ -902,14 +1017,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "c722cb7d-f697-49fa-8d1f-8e3ad6bb8b2a",
+        "request_id": "91fcadf4-49aa-4549-a461-0f5c09549adf",
         "subject": "admin",
         "method": "POST",
         "route": "/admin/users/{user_id}/role",
         "decision": "allow",
         "policy_id": "P10/P15/P17",
         "status": 200,
-        "duration_ms": 4.007
+        "duration_ms": 1.202
       }
     },
     {
@@ -917,7 +1032,7 @@
       "request": "POST /admin/users/bob/role; actor=admin; MFA=false",
       "status": 403,
       "safe": true,
-      "request_id": "5d702cfd-274e-4c8b-9afa-2f21549cb50b",
+      "request_id": "d5f92842-6044-4782-a103-2b6c57b19e51",
       "response": {
         "detail": "forbidden"
       },
@@ -930,14 +1045,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "5d702cfd-274e-4c8b-9afa-2f21549cb50b",
+        "request_id": "d5f92842-6044-4782-a103-2b6c57b19e51",
         "subject": "admin",
         "method": "POST",
         "route": "/admin/users/{user_id}/role",
         "decision": "deny",
         "policy_id": "P10/P15/P17",
         "status": 403,
-        "duration_ms": 0.951
+        "duration_ms": 0.732
       }
     },
     {
@@ -945,7 +1060,7 @@
       "request": "POST /admin/users/admin/role; actor=admin; MFA=true",
       "status": 403,
       "safe": true,
-      "request_id": "8e9b0140-617c-4deb-87d4-f9c06bb915e0",
+      "request_id": "e065853a-32b5-4ccd-a75e-0b8cb3ef6769",
       "response": {
         "detail": "forbidden"
       },
@@ -958,14 +1073,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "8e9b0140-617c-4deb-87d4-f9c06bb915e0",
+        "request_id": "e065853a-32b5-4ccd-a75e-0b8cb3ef6769",
         "subject": "admin",
         "method": "POST",
         "route": "/admin/users/{user_id}/role",
         "decision": "deny",
         "policy_id": "P10/P15/P17",
         "status": 403,
-        "duration_ms": 0.955
+        "duration_ms": 1.248
       }
     },
     {
@@ -973,7 +1088,7 @@
       "request": "PATCH /profile/alice; body={role:admin}",
       "status": 400,
       "safe": true,
-      "request_id": "1528131a-e73e-45ea-902f-4998a7a1d5de",
+      "request_id": "36275a5a-d063-4e3f-acc8-1d4f71be75b6",
       "response": {
         "detail": "invalid_fields"
       },
@@ -986,14 +1101,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "1528131a-e73e-45ea-902f-4998a7a1d5de",
+        "request_id": "36275a5a-d063-4e3f-acc8-1d4f71be75b6",
         "subject": "alice",
         "method": "PATCH",
         "route": "/profile/{user_id}",
         "decision": "deny",
         "policy_id": "P06",
         "status": 400,
-        "duration_ms": 2.589
+        "duration_ms": 2.178
       }
     },
     {
@@ -1001,7 +1116,7 @@
       "request": "POST /transfers; actor=alice; source=acc-b; amount=10",
       "status": 403,
       "safe": true,
-      "request_id": "88d3f370-0c7f-46d3-9623-c3cda12a60f6",
+      "request_id": "f24280bf-bf53-4903-bbb0-3e9fcccfa871",
       "response": {
         "detail": "source_not_owned"
       },
@@ -1014,14 +1129,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "88d3f370-0c7f-46d3-9623-c3cda12a60f6",
+        "request_id": "f24280bf-bf53-4903-bbb0-3e9fcccfa871",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "deny",
         "policy_id": "P04/P05",
         "status": 403,
-        "duration_ms": 2.041
+        "duration_ms": 1.619
       }
     },
     {
@@ -1029,7 +1144,7 @@
       "request": "POST /transfers x5; same Idempotency-Key; amount=10",
       "status": 200,
       "safe": true,
-      "request_id": "60a2b5e3-79ec-4b89-bbad-db271a8d9fc4",
+      "request_id": "2b897734-55c5-419c-adb5-307998e4988d",
       "response": {
         "id": "tr-1",
         "source": "acc-a",
@@ -1045,14 +1160,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "60a2b5e3-79ec-4b89-bbad-db271a8d9fc4",
+        "request_id": "2b897734-55c5-419c-adb5-307998e4988d",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "allow",
         "policy_id": "P04/P05",
         "status": 200,
-        "duration_ms": 1.494
+        "duration_ms": 1.955
       }
     },
     {
@@ -1060,7 +1175,7 @@
       "request": "POST /transfers x20 concurrent; same Idempotency-Key; amount=10",
       "status": 200,
       "safe": true,
-      "request_id": "a5f00679-bc12-4966-b429-a2197d9e3dd0",
+      "request_id": "393c485b-126d-4505-9e0d-6a47bd8fdcf7",
       "response": {
         "id": "tr-1",
         "source": "acc-a",
@@ -1076,14 +1191,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "a5f00679-bc12-4966-b429-a2197d9e3dd0",
+        "request_id": "393c485b-126d-4505-9e0d-6a47bd8fdcf7",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "allow",
         "policy_id": "P04/P05",
         "status": 200,
-        "duration_ms": 21.317
+        "duration_ms": 10.741
       }
     },
     {
@@ -1091,7 +1206,7 @@
       "request": "POST /transfers x2; same key; amount=10 then 20",
       "status": 409,
       "safe": true,
-      "request_id": "0aa546dd-87c3-4a42-8777-3433e681aa0c",
+      "request_id": "06a0168c-4aee-4dea-929e-48ca19f8bc56",
       "response": {
         "detail": "key_reused_with_different_body"
       },
@@ -1104,14 +1219,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "0aa546dd-87c3-4a42-8777-3433e681aa0c",
+        "request_id": "06a0168c-4aee-4dea-929e-48ca19f8bc56",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "deny",
         "policy_id": "P04/P05",
         "status": 409,
-        "duration_ms": 1.565
+        "duration_ms": 0.961
       }
     },
     {
@@ -1119,7 +1234,7 @@
       "request": "POST /transfers x4; distinct keys; amount=20 each",
       "status": 403,
       "safe": true,
-      "request_id": "543c8899-5da4-4abf-8045-e34116bee557",
+      "request_id": "5c81c76f-1d03-49f1-b48b-692de060d6a9",
       "response": {
         "detail": "daily_limit"
       },
@@ -1132,14 +1247,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "543c8899-5da4-4abf-8045-e34116bee557",
+        "request_id": "5c81c76f-1d03-49f1-b48b-692de060d6a9",
         "subject": "alice",
         "method": "POST",
         "route": "/transfers",
         "decision": "deny",
         "policy_id": "P04/P05",
         "status": 403,
-        "duration_ms": 1.191
+        "duration_ms": 0.624
       }
     },
     {
@@ -1147,7 +1262,7 @@
       "request": "POST /auth/login x5; synthetic invalid credentials",
       "status": 429,
       "safe": true,
-      "request_id": "3344287f-d0eb-411c-ae4d-6e64da7f5629",
+      "request_id": "6ea2740d-c35c-4dfd-89ee-9a53c68204ea",
       "response": {
         "detail": "rate_limited"
       },
@@ -1160,14 +1275,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "3344287f-d0eb-411c-ae4d-6e64da7f5629",
+        "request_id": "6ea2740d-c35c-4dfd-89ee-9a53c68204ea",
         "subject": "anonymous",
         "method": "POST",
         "route": "/auth/login",
         "decision": "deny",
         "policy_id": "P-RATE",
         "status": 429,
-        "duration_ms": 0.309
+        "duration_ms": 0.79
       }
     },
     {
@@ -1175,7 +1290,7 @@
       "request": "POST /auth/login x3; synthetic invalid credentials",
       "status": 401,
       "safe": true,
-      "request_id": "e52e7a60-2b1b-4233-9944-6572d69f9f5e",
+      "request_id": "126bf6fe-99cc-4442-9597-37c4846e8fec",
       "response": {
         "detail": "invalid_credentials"
       },
@@ -1188,14 +1303,70 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "e52e7a60-2b1b-4233-9944-6572d69f9f5e",
+        "request_id": "126bf6fe-99cc-4442-9597-37c4846e8fec",
         "subject": "anonymous",
         "method": "POST",
         "route": "/auth/login",
         "decision": "deny",
         "policy_id": "P-RATE",
         "status": 401,
-        "duration_ms": 0.517
+        "duration_ms": 1.134
+      }
+    },
+    {
+      "case": "Rate limit tách tài khoản",
+      "request": "POST /auth/login x4 for alice, then x1 for bob",
+      "status": 401,
+      "safe": true,
+      "request_id": "94894e6e-14f7-4fce-934d-c2207129a5f4",
+      "response": {
+        "detail": "invalid_credentials"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "94894e6e-14f7-4fce-934d-c2207129a5f4",
+        "subject": "anonymous",
+        "method": "POST",
+        "route": "/auth/login",
+        "decision": "deny",
+        "policy_id": "P-RATE",
+        "status": 401,
+        "duration_ms": 0.617
+      }
+    },
+    {
+      "case": "Rate limit hết cửa sổ",
+      "request": "POST /auth/login x4 for alice, advance lab clock 60s, retry",
+      "status": 401,
+      "safe": true,
+      "request_id": "ced12f1d-b5f5-44fc-8da2-b4d50c6ec644",
+      "response": {
+        "detail": "invalid_credentials"
+      },
+      "db": {
+        "balances": {
+          "acc-a": 100,
+          "acc-b": 100
+        },
+        "transfer_count": 0,
+        "sam_role": "support"
+      },
+      "log": {
+        "request_id": "ced12f1d-b5f5-44fc-8da2-b4d50c6ec644",
+        "subject": "anonymous",
+        "method": "POST",
+        "route": "/auth/login",
+        "decision": "deny",
+        "policy_id": "P-RATE",
+        "status": 401,
+        "duration_ms": 0.506
       }
     },
     {
@@ -1203,7 +1374,7 @@
       "request": "GET /transfers?limit=1000000",
       "status": 400,
       "safe": true,
-      "request_id": "e3e718ce-5758-4822-9df2-b014a6a5fe71",
+      "request_id": "84c5a377-0103-43c2-afaf-8589cb40111e",
       "response": {
         "detail": "invalid_limit"
       },
@@ -1216,14 +1387,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "e3e718ce-5758-4822-9df2-b014a6a5fe71",
+        "request_id": "84c5a377-0103-43c2-afaf-8589cb40111e",
         "subject": "alice",
         "method": "GET",
         "route": "/transfers",
         "decision": "deny",
         "policy_id": "P-LIMIT",
         "status": 400,
-        "duration_ms": 0.732
+        "duration_ms": 1.032
       }
     },
     {
@@ -1231,7 +1402,7 @@
       "request": "GET /accounts/acc-a; signed lab JWT aud=other-service",
       "status": 401,
       "safe": true,
-      "request_id": "5989aee6-e28b-492c-9562-7d1fa94f63a1",
+      "request_id": "e107646a-aa54-491f-ab66-bff603a45094",
       "response": {
         "detail": "invalid_token"
       },
@@ -1244,14 +1415,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "5989aee6-e28b-492c-9562-7d1fa94f63a1",
+        "request_id": "e107646a-aa54-491f-ab66-bff603a45094",
         "subject": "anonymous",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "deny",
         "policy_id": "P-DEFAULT",
         "status": 401,
-        "duration_ms": 0.821
+        "duration_ms": 0.554
       }
     },
     {
@@ -1259,7 +1430,7 @@
       "request": "GET /accounts/acc-a; signed lab JWT exp in past",
       "status": 401,
       "safe": true,
-      "request_id": "c35151be-18a3-4902-942b-a3e33c1da2ef",
+      "request_id": "e8fe8d20-7c78-449f-aa31-48c52f3fac95",
       "response": {
         "detail": "invalid_token"
       },
@@ -1272,14 +1443,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "c35151be-18a3-4902-942b-a3e33c1da2ef",
+        "request_id": "e8fe8d20-7c78-449f-aa31-48c52f3fac95",
         "subject": "anonymous",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "deny",
         "policy_id": "P-DEFAULT",
         "status": 401,
-        "duration_ms": 0.92
+        "duration_ms": 1.36
       }
     },
     {
@@ -1287,7 +1458,7 @@
       "request": "POST /transfers; actor=agent; read-only scope",
       "status": 403,
       "safe": true,
-      "request_id": "3056bcaa-7b3d-41c5-9d8f-ad03ef71de16",
+      "request_id": "f65a6dc2-74d4-476a-ab84-11e3e64c27ac",
       "response": {
         "detail": "missing_scope"
       },
@@ -1300,14 +1471,14 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "3056bcaa-7b3d-41c5-9d8f-ad03ef71de16",
+        "request_id": "f65a6dc2-74d4-476a-ab84-11e3e64c27ac",
         "subject": "agent",
         "method": "POST",
         "route": "/transfers",
         "decision": "deny",
         "policy_id": "P-DEFAULT",
         "status": 403,
-        "duration_ms": 1.61
+        "duration_ms": 0.84
       }
     },
     {
@@ -1315,7 +1486,7 @@
       "request": "GET /accounts/acc-b; actor=alice; inspect X-Request-ID and log",
       "status": 403,
       "safe": true,
-      "request_id": "5b2166e7-5ad4-475b-b548-c3d6a1b26013",
+      "request_id": "318a3c18-7a63-4cac-a5a7-c98d5aafbd53",
       "response": {
         "detail": "forbidden"
       },
@@ -1328,26 +1499,26 @@
         "sam_role": "support"
       },
       "log": {
-        "request_id": "5b2166e7-5ad4-475b-b548-c3d6a1b26013",
+        "request_id": "318a3c18-7a63-4cac-a5a7-c98d5aafbd53",
         "subject": "alice",
         "method": "GET",
         "route": "/accounts/{account_id}",
         "decision": "deny",
         "policy_id": "P02",
         "status": 403,
-        "duration_ms": 1.031
+        "duration_ms": 0.621
       }
     }
   ],
   "latency": {
     "before": {
-      "median_ms": 1.899,
-      "p95_ms": 3.488,
+      "median_ms": 1.491,
+      "p95_ms": 2.781,
       "note": "ASGI trong cùng tiến trình; chỉ minh họa chi phí lab, không suy ra hiệu năng triển khai thật"
     },
     "after": {
-      "median_ms": 1.489,
-      "p95_ms": 2.193,
+      "median_ms": 1.47,
+      "p95_ms": 2.97,
       "note": "ASGI trong cùng tiến trình; chỉ minh họa chi phí lab, không suy ra hiệu năng triển khai thật"
     }
   }
