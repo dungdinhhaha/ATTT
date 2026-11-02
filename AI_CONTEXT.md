@@ -20,7 +20,7 @@
 - `tests/results/`: request/response đã khử bí mật, logs, số liệu và báo cáo thực nghiệm.
 - `docs/reports/THESIS/`: báo cáo Word/PDF; cần điền mã nhóm, thành viên, MSSV, giảng viên và ngành.
 - `docs/guides/`: threat model, logging, phạm vi an toàn, hướng dẫn OPA/Newman.
-- `docs/planning/`: workbook kế hoạch nhóm.
+- `docs/evidence/Yeu_cau_va_minh_chung.xlsx`: bảng đối chiếu yêu cầu đề bài, việc đã làm, hướng dẫn và tiêu chí/minh chứng; không phải kế hoạch công việc.
 
 ## Kết quả đã kiểm chứng
 Lần chạy gần nhất của `python tests/demo.py`: bản fixed đạt 23/23; p95 v1=4.254 ms, v2=6.976 ms. Đo bằng HTTPX ASGI cùng tiến trình, không suy ra hiệu năng production. Newman: 3/3 assertions cho mỗi collection BOLA. Cấu hình Compose hợp lệ; Docker Engine trên máy không kết nối được, do đó chưa tuyên bố container hoặc OPA runtime đã chạy thành công.

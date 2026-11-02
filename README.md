@@ -28,7 +28,7 @@ API chỉ bind `127.0.0.1:8000`; mặc định là bản đã sửa. Để tái 
 - `app/`: API, ma trận quyền và policy trước/sau sửa.
 - `tests/`: bộ Python, demo trực tiếp, Postman/Newman và kết quả.
 - `docs/guides/`: hướng dẫn demo, logging, mô hình đe dọa và quy tắc an toàn.
-- `docs/planning/`: workbook kế hoạch nhóm.
+- `docs/evidence/Yeu_cau_va_minh_chung.xlsx`: đối chiếu từng yêu cầu đề bài với phần đã làm, cách tái hiện và minh chứng.
 - `docs/reports/THESIS/`: báo cáo Word/PDF.
 - `AI_CONTEXT.md`: bối cảnh để AI hỗ trợ nhóm đúng theo repo.
 
