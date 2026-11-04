@@ -45,7 +45,7 @@ mỗi lần retry có thể tạo giao dịch mới
 
 `after/minibank.rego` đặc tả sáu quyết định: `account_read`, `support_read`, `admin_list`, `admin_role_write`, `profile_write`, `transfer_create`. Mặc định `allow := false`; chỉ điều kiện khớp mới cho phép. API gửi subject, role, MFA và dữ kiện tài nguyên do server lấy tới OPA. Nếu OPA không trả `result: true` hoặc không phản hồi, API từ chối khi đã cấu hình `OPA_URL`.
 
-Các kiểm tra token, schema, rate limit, idempotency và hạn mức vẫn nằm trong API, không nằm toàn bộ trong OPA. Vì vậy cần đọc cả `app/api.py`, `after/minibank.rego` và ma trận quyền để hiểu đầy đủ lớp bảo vệ.
+Các kiểm tra token, schema, rate limit, idempotency và hạn mức vẫn nằm trong API, không nằm toàn bộ trong OPA. Vì vậy cần đọc `app/before.py`, `app/after.py`, `after/minibank.rego` và ma trận quyền để hiểu đầy đủ lớp bảo vệ.
 
 ## Trạng thái xác minh
 
