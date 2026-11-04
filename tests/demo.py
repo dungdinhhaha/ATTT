@@ -11,7 +11,10 @@ from xml.etree import ElementTree as ET
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import httpx
-from app import create_app, issue_token
+from app.after import issue_token, create_app as create_fixed_app
+from app.before import create_app as create_before_app
+
+APP_FACTORIES = {"before": create_before_app, "fixed": create_fixed_app}
 
 ROOT = Path(__file__).parent
 OUT = ROOT / "results"
@@ -52,7 +55,7 @@ def auth(actor, role="customer", scope="accounts:read transfers:create profile:w
 
 
 async def one(mode, case):
-    app = create_app(mode)
+    app = APP_FACTORIES[mode]()
     lab = app.state.lab
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://127.0.0.1") as c:
         if case == "BOLA support ngoài ticket":
@@ -163,7 +166,7 @@ CASES = ["BOLA support ngoài ticket", "Support có ticket", "BOLA customer", "C
 
 
 async def latency(mode):
-    app = create_app(mode)
+    app = APP_FACTORIES[mode]()
     timings = []
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://127.0.0.1") as c:
         h = auth("alice")
@@ -192,7 +195,7 @@ async def main():
     data["latency"] = {"before": await latency("before"), "after": await latency("fixed")}
     (OUT/"before_after.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     (OUT/"demo.html").write_text(html_report(data), encoding="utf-8")
-    (OUT/"openapi.json").write_text(json.dumps(create_app("fixed").openapi(), ensure_ascii=False, indent=2), encoding="utf-8")
+    (OUT/"openapi.json").write_text(json.dumps(create_fixed_app().openapi(), ensure_ascii=False, indent=2), encoding="utf-8")
     suite = ET.Element("testsuite", name="MiniBank-Lab", tests=str(len(CASES)),
                        failures=str(sum(not x["safe"] for x in data["after"])))
     for item in data["after"]:
@@ -200,7 +203,7 @@ async def main():
         if not item["safe"]: ET.SubElement(case, "failure", message="Expected control failed")
     ET.ElementTree(suite).write(OUT/"junit.xml", encoding="utf-8", xml_declaration=True)
     lines = ["# Báo cáo thực nghiệm — Đề tài 27", "", "## Phạm vi", "",
-             "MiniBank-Lab là API tự viết, dữ liệu và token giả, chạy cục bộ. Hai chế độ v1/v2 dùng cùng mã nguồn và dữ liệu khởi tạo. Không kết nối API thật.", "",
+             "MiniBank-Lab là API tự viết, dữ liệu và token giả, chạy cục bộ. Hai bản có mã riêng ở app/before.py và app/after.py, cùng dữ liệu khởi tạo để so sánh. Không kết nối API thật.", "",
              "## Cơ sở lý thuyết", "",
              "- Xác thực trả lời ai đang gọi; phân quyền chức năng trả lời được gọi route nào; phân quyền đối tượng trả lời được thao tác trên bản ghi nào.",
              "- JWT đã ký chỉ xác nhận nội dung token không bị sửa theo khóa ký. API vẫn phải kiểm issuer, audience, thời hạn, scope và quan hệ của người dùng với tài nguyên.",
@@ -214,7 +217,7 @@ async def main():
               f"p95 v1: {data['latency']['before']['p95_ms']} ms; p95 v2: {data['latency']['after']['p95_ms']} ms. Mỗi chế độ có 20 request làm nóng và 100 request đo, chạy qua ASGI trong cùng tiến trình.",
               "Số này chỉ mô tả lần chạy trên máy lab; cần tải thật qua HTTP, nhiều lần lặp và phần cứng cố định để kết luận overhead triển khai.", "",
               "## Minh chứng", "",
-              "- Mã lab: `app/api.py`, `compose.yaml`, `Dockerfile`.",
+              "- Mã lab: `app/before.py`, `app/after.py`, `compose.yaml`, `Dockerfile`.",
               "- Ma trận quyền: `app/policy/permission_matrix.csv`.",
               "- Bộ test tự động: `tests/demo.py`; báo cáo máy đọc: `tests/results/junit.xml`.",
               "- Request/response đã bỏ token, trạng thái DB và log từ chối có correlation ID: `tests/results/before_after.json`.",

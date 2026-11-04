@@ -5,12 +5,10 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $projectRoot
 
 if (-not (Get-NetTCPConnection -LocalPort 8001 -State Listen -ErrorAction SilentlyContinue)) {
-    $env:LAB_MODE = 'before'
-    Start-Process -FilePath 'python' -ArgumentList '-m','uvicorn','app:app','--host','127.0.0.1','--port','8001' -WorkingDirectory $projectRoot -WindowStyle Hidden | Out-Null
-    Remove-Item Env:LAB_MODE
+    Start-Process -FilePath 'python' -ArgumentList '-m','uvicorn','app.before:app','--host','127.0.0.1','--port','8001' -WorkingDirectory $projectRoot -WindowStyle Hidden | Out-Null
 }
 if (-not (Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue)) {
-    Start-Process -FilePath 'python' -ArgumentList '-m','uvicorn','app:app','--host','127.0.0.1','--port','8000' -WorkingDirectory $projectRoot -WindowStyle Hidden | Out-Null
+    Start-Process -FilePath 'python' -ArgumentList '-m','uvicorn','app.after:app','--host','127.0.0.1','--port','8000' -WorkingDirectory $projectRoot -WindowStyle Hidden | Out-Null
 }
 Start-Sleep -Seconds 2
 

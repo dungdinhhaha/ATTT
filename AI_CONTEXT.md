@@ -12,7 +12,7 @@
 - Không ghi token/khóa vào log, ảnh chụp, commit hoặc tài liệu chia sẻ.
 
 ## Cấu trúc và trạng thái dự án
-- `app/api.py`: FastAPI, chế độ before/fixed, JWT HS256 giả lập, middleware và policy trong ứng dụng.
+- `app/before.py` và `app/after.py`: hai API có route riêng. `app/api.py` chỉ chọn phiên bản cho lệnh Docker cũ; bộ Python và script demo gọi trực tiếp hai module.
 - `app/policy/`: ma trận quyền và policy OPA trước/sau sửa.
 - `tests/demo.py`: bộ test Python 26 tình huống, tạo kết quả JSON/HTML/OpenAPI/JUnit trong `tests/results/`.
 - `tests/live_demo.py`, `tests/start_demo.ps1`: demo HTTP cục bộ.
@@ -23,7 +23,7 @@
 - `docs/evidence/Yeu_cau_va_minh_chung.xlsx`: bảng đối chiếu yêu cầu đề bài, việc đã làm, hướng dẫn và tiêu chí/minh chứng; không phải kế hoạch công việc.
 
 ## Kết quả đã kiểm chứng
-Kết quả lưu trong `tests/results/before_after.json`: bản fixed đạt 26/26; p95 v1=2.781 ms, v2=2.970 ms (giá trị thay đổi theo lần chạy). Đo bằng HTTPX ASGI cùng tiến trình, không suy ra hiệu năng production. Newman: 3/3 assertions cho mỗi collection BOLA. Docker Compose và OPA đã chạy thật; `python tests/verify_opa.py` xác nhận quyết định cho phép/từ chối và phản hồi API. Xem `tests/results/opa_runtime.json`. OPA chỉ được bật trong Compose, không bật trong bộ ASGI 26 ca.
+Kết quả lưu trong `tests/results/before_after.json`: bản fixed đạt 26/26; p95 v1=3.127 ms, v2=2.718 ms (giá trị thay đổi theo lần chạy). Đo bằng HTTPX ASGI cùng tiến trình, không suy ra hiệu năng production. Newman: 3/3 assertions cho mỗi collection BOLA. Docker Compose và OPA đã chạy thật; `python tests/verify_opa.py` xác nhận quyết định cho phép/từ chối và phản hồi API. Xem `tests/results/opa_runtime.json`. OPA chỉ được bật trong Compose, không bật trong bộ ASGI 26 ca.
 
 ## Quy tắc khi AI hỗ trợ nhóm
 1. Kiểm tra `git status` và đọc file liên quan trước khi sửa; không ghi đè thay đổi của thành viên.

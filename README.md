@@ -2,6 +2,8 @@
 
 Đồ án kiểm thử phân quyền đối tượng, phân quyền chức năng và giới hạn lạm dụng API. Dự án sử dụng **API tự viết trong lab cô lập**, đúng một trong hai lựa chọn của đề bài. Dữ liệu, tài khoản và token đều giả.
 
+Hai phiên bản có mã riêng: `app/before.py` (cố ý có lỗi để kiểm thử) và `app/after.py` (đã bổ sung kiểm soát). Chạy đồng thời để so sánh: `python -m uvicorn app.before:app --port 8001` và `python -m uvicorn app.after:app --port 8000`.
+
 ## Chạy demo và xem kết quả
 
 Để trình bày trực tiếp trước lớp, xem `docs/guides/HUONG_DAN_DEMO.md` và chạy `tests/start_demo.ps1`. Script mở hai API lab, gửi request thật tới bản trước/sau, chạy 26 ca hồi quy và mở bảng kết quả.
@@ -26,7 +28,7 @@ API chỉ bind `127.0.0.1:8000`; mặc định là bản đã sửa. Lệnh xác
 
 ## Cấu trúc minh chứng
 
-- `app/`: API, ma trận quyền và policy trước/sau sửa.
+- `app/before.py`, `app/after.py`: hai API độc lập; `app/api.py` chỉ giữ tương thích với lệnh cũ. Ma trận quyền và Rego ở `app/policy/`.
 - `tests/`: bộ Python, demo trực tiếp, Postman/Newman và kết quả.
 - `docs/guides/`: hướng dẫn demo, logging, mô hình đe dọa và quy tắc an toàn.
 - `docs/evidence/Yeu_cau_va_minh_chung.xlsx`: đối chiếu từng yêu cầu đề bài với phần đã làm, cách tái hiện và minh chứng.

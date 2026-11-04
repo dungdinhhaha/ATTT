@@ -29,7 +29,7 @@ Docker Compose và OPA đã chạy và được xác minh ngày 02/11/2026. Đ�
 
 ## Tệp cần nộp
 
-- `app/api.py`, `Dockerfile`, `compose.yaml`, `requirements.txt`: mã và cấu hình lab.
+- `app/before.py`, `app/after.py`, `Dockerfile`, `compose.yaml`, `requirements.txt`: mã hai API và cấu hình lab.
 - `app/policy/permission_matrix.csv`: ma trận quyền.
 - `tests/demo.py`, `tests/live_demo.py`, `tests\results\junit.xml`: kiểm thử tự động.
 - `tests\results\demo.html`, `tests\results\before_after.json`, `tests\results\REPORT.md`: kết quả, request/response đã khử bí mật, log có correlation ID.

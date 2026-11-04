@@ -2,7 +2,7 @@
 
 ## Phạm vi
 
-MiniBank-Lab là API tự viết, dữ liệu và token giả, chạy cục bộ. Hai chế độ v1/v2 dùng cùng mã nguồn và dữ liệu khởi tạo. Không kết nối API thật.
+MiniBank-Lab là API tự viết, dữ liệu và token giả, chạy cục bộ. Hai bản có mã riêng ở app/before.py và app/after.py, cùng dữ liệu khởi tạo để so sánh. Không kết nối API thật.
 
 ## Cơ sở lý thuyết
 
@@ -46,12 +46,12 @@ Bản v2 đạt **26/26** ca. Các ca này là mẫu kiểm tra đã triển kha
 
 ## Đo độ trễ mẫu
 
-p95 v1: 2.781 ms; p95 v2: 2.97 ms. Mỗi chế độ có 20 request làm nóng và 100 request đo, chạy qua ASGI trong cùng tiến trình.
+p95 v1: 3.127 ms; p95 v2: 2.718 ms. Mỗi chế độ có 20 request làm nóng và 100 request đo, chạy qua ASGI trong cùng tiến trình.
 Số này chỉ mô tả lần chạy trên máy lab; cần tải thật qua HTTP, nhiều lần lặp và phần cứng cố định để kết luận overhead triển khai.
 
 ## Minh chứng
 
-- Mã lab: `app/api.py`, `compose.yaml`, `Dockerfile`.
+- Mã lab: `app/before.py`, `app/after.py`, `compose.yaml`, `Dockerfile`.
 - Ma trận quyền: `app/policy/permission_matrix.csv`.
 - Bộ test tự động: `tests/demo.py`; báo cáo máy đọc: `tests/results/junit.xml`.
 - Request/response đã bỏ token, trạng thái DB và log từ chối có correlation ID: `tests/results/before_after.json`.

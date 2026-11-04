@@ -6,17 +6,17 @@
   "api_with_opa": {
     "own_account": {
       "status": 200,
-      "request_id": "c03aa4be-ec4b-44bd-ae33-16d6de487746"
+      "request_id": "037d5c68-bcfe-4400-aab6-dc0ac31a8055"
     },
     "other_account": {
       "status": 403,
       "detail": "opa_denied",
-      "request_id": "47796d49-86f7-4218-a61a-0f1b5cc79b8e"
+      "request_id": "72e73481-518c-4394-887d-57b04ae065b9"
     },
     "support_admin_scope_but_wrong_role": {
       "status": 403,
       "detail": "opa_denied",
-      "request_id": "bdf20671-1620-4cea-a605-b3eeb20d0834"
+      "request_id": "8ca261b4-8108-4dba-a067-3887f4e46537"
     }
   },
   "note": "Synthetic lab identities. Authorization tokens omitted."
