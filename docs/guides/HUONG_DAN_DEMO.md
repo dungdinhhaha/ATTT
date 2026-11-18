@@ -23,7 +23,7 @@ Nếu muốn kiểm tra nhanh API đang chạy: mở `http://127.0.0.1:8000/acco
 
 ## Về Docker trên máy này
 
-Docker Compose và OPA đã chạy và được xác minh ngày 02/11/2026. Để trình bày OPA, chạy `docker compose up -d --build`, sau đó `python tests/verify_opa.py` và mở `tests/results/opa_runtime.json`: OPA trả `true` cho Alice đọc tài khoản mình, `false` cho tài khoản Bob; API trả 200/403 tương ứng, 403 có `opa_denied` và correlation ID. Dừng bằng `docker compose down` trước khi chạy script demo Python dùng cùng cổng 8000.
+Docker Compose chạy đồng thời API trước sửa ở cổng 8001, API sau sửa ở cổng 8000 và OPA. Để demo giao diện bằng Burp, chạy `tests/start_web_demo.ps1` và xem `docs/guides/HUONG_DAN_WEB_DEMO.md`. Để xác minh OPA, chạy `python tests/verify_opa.py` và mở `tests/results/opa_runtime.json`: OPA trả `true` cho Alice đọc tài khoản mình, `false` cho tài khoản Bob; API trả 200/403 tương ứng, 403 có `opa_denied` và correlation ID. Dừng bằng `docker compose down` trước khi chạy `tests/start_demo.ps1` vì script này cũng dùng cổng 8000 và 8001.
 
 Để trình diễn thêm request trực tiếp trên API Docker, chạy `python tests/live_demo.py --mode fixed` sau khi Compose khởi động. Dừng bằng `docker compose down`.
 

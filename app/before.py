@@ -4,10 +4,12 @@ import base64
 import hashlib
 import hmac
 import json
+import os
 import time
 import uuid
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
+from .demo_ui import install_demo_ui
 SECRET = b'minibank-lab-only-fixed-demo-key'
 ISSUER = 'minibank-lab'
 AUDIENCE = 'minibank-api'
@@ -33,6 +35,13 @@ def decode_token(token):
         return claims
     except Exception as exc:
         raise HTTPException(401, 'invalid_token') from exc
+
+def _write_log_line(entry):
+    """Ghi mỗi bản ghi audit ra file JSON lines khi có biến LAB_LOG_FILE."""
+    path = os.environ.get('LAB_LOG_FILE')
+    if path:
+        with open(path, 'a', encoding='utf-8') as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + '\n')
 
 class Lab:
 
@@ -61,7 +70,9 @@ def create_app():
             response = JSONResponse({'detail': 'internal_error'}, status_code=500)
         response.headers['X-Request-ID'] = rid
         route = request.scope.get('route')
-        lab.logs.append({'request_id': rid, 'subject': getattr(request.state, 'subject', 'anonymous'), 'method': request.method, 'route': getattr(route, 'path', request.url.path), 'decision': 'deny' if response.status_code >= 400 else 'allow', 'policy_id': getattr(request.state, 'policy_id', 'P-DEFAULT'), 'status': response.status_code, 'duration_ms': round((time.perf_counter() - start) * 1000, 3)})
+        entry = {'request_id': rid, 'subject': getattr(request.state, 'subject', 'anonymous'), 'method': request.method, 'route': getattr(route, 'path', request.url.path), 'decision': 'deny' if response.status_code >= 400 else 'allow', 'policy_id': getattr(request.state, 'policy_id', 'P-DEFAULT'), 'status': response.status_code, 'duration_ms': round((time.perf_counter() - start) * 1000, 3)}
+        lab.logs.append(entry)
+        _write_log_line(entry)
         return response
 
     def actor(request: Request, scope=None):
@@ -153,5 +164,6 @@ def create_app():
         c = actor(request, 'accounts:read')
         request.state.policy_id = 'P-LIMIT'
         return lab.transfers[:limit]
+    install_demo_ui(app, issue_token, "before")
     return app
 app = create_app()

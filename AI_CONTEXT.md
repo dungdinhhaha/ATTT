@@ -12,10 +12,10 @@
 - Không ghi token/khóa vào log, ảnh chụp, commit hoặc tài liệu chia sẻ.
 
 ## Cấu trúc và trạng thái dự án
-- `app/before.py` và `app/after.py`: hai API có route riêng. `app/api.py` chỉ chọn phiên bản cho lệnh Docker cũ; bộ Python và script demo gọi trực tiếp hai module.
+- `app/before.py` và `app/after.py`: hai API có route riêng. Docker Compose chạy đồng thời hai phiên bản qua `app/api.py`: bản trước sửa ở cổng 8001, bản sau sửa có OPA ở cổng 8000. Bộ Python 26 ca gọi trực tiếp hai module.
 - `app/policy/`: ma trận quyền và policy OPA trước/sau sửa.
-- `tests/demo.py`: bộ test Python 26 tình huống, tạo kết quả JSON/HTML/OpenAPI/JUnit trong `tests/results/`.
-- `tests/live_demo.py`, `tests/start_demo.ps1`: demo HTTP cục bộ.
+- `tests/demo.py`: bộ test Python 26 tình huống, tạo kết quả JSON/HTML/OpenAPI/JUnit trong `tests/results/`; service `regression` trong Compose chạy bộ này và xác minh OPA.
+- `tests/live_demo.py`, `tests/start_demo.ps1`: demo HTTP cục bộ; `tests/start_web_demo.ps1`: khởi động demo web và chạy test bằng Docker Compose.
 - `tests/postman/`: collection BOLA trước/sau; Newman đã đạt 3/3 assertions mỗi collection, chưa đủ 26 ca.
 - `tests/results/`: request/response đã khử bí mật, logs, số liệu và báo cáo thực nghiệm.
 - `docs/reports/THESIS/`: báo cáo Word/PDF; cần điền mã nhóm, thành viên, MSSV, giảng viên và ngành.

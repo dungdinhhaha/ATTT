@@ -1,8 +1,19 @@
 services:
+  minibank_before:
+    build: .
+    environment:
+      LAB_MODE: before
+    ports:
+      - "127.0.0.1:8001:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    networks:
+      - demo
   minibank:
     build: .
     environment:
-      LAB_MODE: ${LAB_MODE:-fixed}
+      LAB_MODE: fixed
       OPA_URL: http://opa:8181/v1/data/minibank/authz/allow
     depends_on:
       - opa
@@ -22,6 +33,24 @@ services:
     read_only: true
     networks:
       - lab
+  regression:
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+    profiles:
+      - tests
+    environment:
+      OPA_DIRECT_URL: http://opa:8181/v1/data/minibank/authz/allow
+      FIXED_URL: http://minibank:8000
+    depends_on:
+      - minibank_before
+      - minibank
+      - opa
+    volumes:
+      - ./tests/results:/lab/tests/results
+    networks:
+      - lab
+      - demo
 networks:
   lab:
     internal: true

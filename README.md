@@ -8,6 +8,10 @@ Hai phiên bản có mã riêng: `app/before.py` (cố ý có lỗi để kiểm
 
 Để trình bày trực tiếp trước lớp, xem `docs/guides/HUONG_DAN_DEMO.md` và chạy `tests/start_demo.ps1`. Script mở hai API lab, gửi request thật tới bản trước/sau, chạy 26 ca hồi quy và mở bảng kết quả.
 
+Muốn demo giao diện qua Burp và chạy test chỉ bằng Docker, chạy `powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\start_web_demo.ps1`. Docker Compose chạy bản cũ ở cổng 8001, bản mới ở cổng 8000 cùng OPA; container kiểm thử chạy 26 ca và xác minh OPA. Mở hai trang `/demo` bằng Burp Browser và bảng `tests/results/demo.html`. Hướng dẫn ở `docs/guides/HUONG_DAN_WEB_DEMO.md`.
+
+Muốn học cách tự viết hoặc mở rộng bộ test hồi quy, xem `docs/guides/HUONG_DAN_VIET_TEST_HOI_QUY.md` (ma trận quyền → request → assertion → chạy trước/sau → đọc kết quả).
+
 Yêu cầu Python 3.12. Trong thư mục này:
 
 ```powershell
@@ -24,7 +28,7 @@ docker compose up -d --build
 python tests/verify_opa.py
 ```
 
-API chỉ bind `127.0.0.1:8000`; mặc định là bản đã sửa. Lệnh xác minh OPA lưu quyết định trực tiếp và phản hồi API đã khử token vào `tests/results/opa_runtime.json`. Để tái hiện v1 trong lab, đặt `LAB_MODE=before` trước khi chạy Compose. Dừng bằng `docker compose down`.
+Hai API chỉ bind `127.0.0.1`: bản trước sửa ở cổng 8001 và bản sau sửa có OPA ở cổng 8000. Lệnh xác minh OPA lưu quyết định trực tiếp và phản hồi API đã khử token vào `tests/results/opa_runtime.json`. Dừng bằng `docker compose down`.
 
 ## Cấu trúc minh chứng
 

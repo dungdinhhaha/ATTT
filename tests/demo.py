@@ -2,6 +2,7 @@
 import asyncio
 import html
 import json
+import os
 import statistics
 import time
 from pathlib import Path
@@ -46,7 +47,7 @@ REQUESTS = {
     "JWT sai audience": "GET /accounts/acc-a; signed lab JWT aud=other-service",
     "JWT hết hạn": "GET /accounts/acc-a; signed lab JWT exp in past",
     "Agent không được ghi": "POST /transfers; actor=agent; read-only scope",
-    "Log có ID, không lộ token": "GET /accounts/acc-b; actor=alice; inspect X-Request-ID and log",
+    "Log có ID, không lộ token": "GET /accounts/acc-a; actor=alice; kiểm tra X-Request-ID trong file log và phản hồi",
 }
 
 
@@ -102,11 +103,13 @@ async def one(mode, case):
             r = responses[-1]
             safe = len(lab.transfers) == 1 and lab.accounts["acc-a"]["balance"] == 90
         elif case == "Gửi song song cùng key":
+            lab.accounts["acc-a"]["balance"] = 1000  # đủ số dư để mọi lần gửi đều hợp lệ về số dư
             h = {**auth("alice"), "Idempotency-Key": "parallel"}
             payload = {"source": "acc-a", "destination": "acc-b", "amount": 10}
             responses = await asyncio.gather(*[c.post("/transfers", json=payload, headers=h) for _ in range(20)])
             r = responses[-1]
-            safe = len(lab.transfers) == 1 and lab.accounts["acc-a"]["balance"] == 90
+            all_ok = all(x.status_code == 200 for x in responses)
+            safe = all_ok and len(lab.transfers) == 1 and lab.accounts["acc-a"]["balance"] == 990
         elif case == "Cùng key khác nội dung":
             h = {**auth("alice"), "Idempotency-Key": "conflict"}
             await c.post("/transfers", json={"source": "acc-a", "destination": "acc-b", "amount": 10}, headers=h)
@@ -148,9 +151,14 @@ async def one(mode, case):
             safe = r.status_code == 403 and not lab.transfers
         elif case == "Log có ID, không lộ token":
             token = issue_token("alice")
-            r = await c.get("/accounts/acc-b", headers={"Authorization": "Bearer " + token})
+            r = await c.get("/accounts/acc-a", headers={"Authorization": "Bearer " + token})
             rid = r.headers.get("X-Request-ID")
-            safe = bool(rid) and any(x["request_id"] == rid for x in lab.logs) and token not in json.dumps(lab.logs)
+            log_path = Path(os.environ["LAB_LOG_FILE"])
+            entries = [json.loads(line) for line in log_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+            log_text = log_path.read_text(encoding="utf-8")
+            in_file = bool(rid) and any(e.get("request_id") == rid for e in entries)
+            leaked = token in log_text or "Bearer" in log_text or token in r.text or token in json.dumps(dict(r.headers))
+            safe = r.status_code == 200 and in_file and not leaked
         else:
             raise ValueError(case)
         return {"case": case, "request": REQUESTS[case], "status": r.status_code, "safe": safe,
@@ -186,12 +194,33 @@ def html_report(data):
     return """<!doctype html><html lang='vi'><meta charset='utf-8'><title>Demo đề tài 27</title>
 <style>body{font:16px system-ui;max-width:1100px;margin:40px auto;color:#142538;background:#f5f8fb;padding:0 24px}h1{color:#123f70}section{background:white;padding:24px;border-radius:14px;margin:18px 0;box-shadow:0 3px 16px #dce5ee}table{border-collapse:collapse;width:100%}th,td{padding:10px;text-align:left;border-bottom:1px solid #dde5ed}th{background:#e5f1fb}.ok{color:#147246;font-weight:700}.warn{color:#a34b00}</style>
 <h1>Đề tài 27 · Demo kiểm thử API</h1><p>MiniBank-Lab, dữ liệu và token giả, chạy cục bộ.</p>
-<section><h2>Kết quả</h2><p class='ok'>Bản đã sửa: """+str(sum(x["safe"] for x in data["after"]))+"/"+str(len(data["after"]))+" ca đạt điều kiện kiểm tra.</p><p>Hai cột HTTP chỉ là tóm tắt; tệp JSON kèm trạng thái DB và log.</p><table><tr><th>Ca kiểm thử</th><th>HTTP v1</th><th>HTTP v2</th><th>Kết quả v2</th></tr>"+"".join(rows)+"</table></section><section><h2>Độ trễ mẫu</h2><p>p95 v1: "+str(data["latency"]["before"]["p95_ms"])+" ms · p95 v2: "+str(data["latency"]["after"]["p95_ms"])+" ms</p><p class='warn'>Đo trong cùng tiến trình, không dùng để kết luận hiệu năng production.</p></section><section><h2>Chạy lại</h2><p>Trong thư mục dự án: <code>python tests/demo.py</code>. API riêng: <code>docker compose up -d --build</code>, chỉ mở tại 127.0.0.1:8000.</p></section></html>"
+<section><h2>Kết quả</h2><p class='ok'>Bản đã sửa: """+str(sum(x["safe"] for x in data["after"]))+"/"+str(len(data["after"]))+" ca đạt điều kiện kiểm tra.</p><p>Hai cột HTTP chỉ là tóm tắt; tệp JSON kèm trạng thái DB và log.</p><table><tr><th>Ca kiểm thử</th><th>HTTP v1</th><th>HTTP v2</th><th>Kết quả v2</th></tr>"+"".join(rows)+"</table></section><section><h2>Độ trễ mẫu</h2><p>p95 v1: "+str(data["latency"]["before"]["p95_ms"])+" ms · p95 v2: "+str(data["latency"]["after"]["p95_ms"])+" ms</p><p class='warn'>26 ca chạy bằng HTTPX ASGI trong container; kiểm tra OPA trên API đang chạy được lưu riêng ở opa_runtime.json. Số đo không dùng để kết luận hiệu năng production.</p></section><section><h2>Chạy lại</h2><p>Tại thư mục dự án: <code>docker compose --profile tests run --rm --no-deps regression</code>. Web demo: 127.0.0.1:8001/demo (trước) và 127.0.0.1:8000/demo (sau).</p></section></html>"
+
+
+GROUPS = {
+    "Chặn đúng ca tấn công": ["BOLA support ngoài ticket", "BOLA customer", "Không có token", "BFLA support nâng role",
+                              "Thiếu scope admin", "Admin thiếu MFA", "Admin tự nâng quyền", "Mass assignment",
+                              "Chuyển từ tài khoản khác", "Cùng key khác nội dung", "Chia nhỏ vượt hạn mức",
+                              "Giới hạn đăng nhập", "Giới hạn page size", "JWT sai audience", "JWT hết hạn",
+                              "Agent không được ghi"],
+    "Chống trùng giao dịch": ["Gửi lặp giao dịch", "Gửi song song cùng key"],
+    "Đường hợp lệ (kiểm tra hồi quy)": ["Customer hợp lệ", "Sửa hồ sơ hợp lệ", "Admin hợp lệ", "Support có ticket"],
+    "Cho phép đúng ở ngưỡng đăng nhập": ["Đăng nhập dưới ngưỡng", "Rate limit tách tài khoản", "Rate limit hết cửa sổ"],
+    "Truy vết log": ["Log có ID, không lộ token"],
+}
+assert sorted(sum(GROUPS.values(), [])) == sorted(CASES)
 
 
 async def main():
-    data = {"before": [await one("before", x) for x in CASES],
-            "after": [await one("fixed", x) for x in CASES]}
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # console Windows mặc định cp1252 làm lỗi in tiếng Việt
+    results = {}
+    for mode, log_name in (("before", "app_log_before.jsonl"), ("fixed", "app_log_after.jsonl")):
+        log_path = OUT / log_name
+        log_path.write_text("", encoding="utf-8")  # mỗi lần chạy bắt đầu từ file log rỗng
+        os.environ["LAB_LOG_FILE"] = str(log_path)
+        results[mode] = [await one(mode, x) for x in CASES]
+    data = {"before": results["before"], "after": results["fixed"]}
     data["latency"] = {"before": await latency("before"), "after": await latency("fixed")}
     (OUT/"before_after.json").write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     (OUT/"demo.html").write_text(html_report(data), encoding="utf-8")
@@ -211,8 +240,13 @@ async def main():
              "- Rate limit kiểm soát tần suất; idempotency bảo đảm gửi lại cùng lệnh không nhân đôi giao dịch; kiểm tra hạn mức phải cộng dồn theo luồng nghiệp vụ.", "",
              "## Kết quả từ lần chạy này", "",
              f"Bản v2 đạt **{sum(x['safe'] for x in data['after'])}/{len(CASES)}** ca. Các ca này là mẫu kiểm tra đã triển khai, không phải tuyên bố phủ mọi route hay mọi biến thể tấn công.", "",
-             "| Ca kiểm thử | HTTP v1 | HTTP v2 | v2 đạt? |", "|---|---:|---:|---|"]
-    lines += [f"| {a['case']} | {b['status']} | {a['status']} | {'Có' if a['safe'] else 'Không'} |" for b,a in zip(data["before"],data["after"])]
+             "| Ca kiểm thử | HTTP v1 | HTTP v2 | Giao dịch ghi nhận v1/v2 | v2 đạt? |", "|---|---:|---:|---:|---|"]
+    lines += [f"| {a['case']} | {b['status']} | {a['status']} | {b['db']['transfer_count']}/{a['db']['transfer_count']} | {'Có' if a['safe'] else 'Không'} |" for b,a in zip(data["before"],data["after"])]
+    lines += ["", "## Thống kê theo nhóm", "", "| Nhóm | Số ca | v1 đạt | v2 đạt |", "|---|---:|---:|---:|"]
+    for name, cases in GROUPS.items():
+        b_ok = sum(x["safe"] for x in data["before"] if x["case"] in cases)
+        a_ok = sum(x["safe"] for x in data["after"] if x["case"] in cases)
+        lines.append(f"| {name} | {len(cases)} | {b_ok} | {a_ok} |")
     lines += ["", "## Đo độ trễ mẫu", "",
               f"p95 v1: {data['latency']['before']['p95_ms']} ms; p95 v2: {data['latency']['after']['p95_ms']} ms. Mỗi chế độ có 20 request làm nóng và 100 request đo, chạy qua ASGI trong cùng tiến trình.",
               "Số này chỉ mô tả lần chạy trên máy lab; cần tải thật qua HTTP, nhiều lần lặp và phần cứng cố định để kết luận overhead triển khai.", "",
@@ -222,6 +256,7 @@ async def main():
               "- Bộ test tự động: `tests/demo.py`; báo cáo máy đọc: `tests/results/junit.xml`.",
               "- Request/response đã bỏ token, trạng thái DB và log từ chối có correlation ID: `tests/results/before_after.json`.",
               "- Đặc tả OpenAPI: `tests/results/openapi.json`.",
+              "- Log ứng dụng dạng JSON lines (không chứa token): `tests/results/app_log_before.jsonl`, `tests/results/app_log_after.jsonl`.",
               "- Hướng dẫn log và phạm vi đạo đức: `docs/guides/LOGGING.md`, `docs/guides/RULES_OF_ENGAGEMENT.md`.", "",
               "## Giới hạn", "",
               "Lab dùng dữ liệu trong bộ nhớ và issuer JWT giả; chưa tích hợp Keycloak, crAPI hoặc ZAP. OPA đã được xác minh riêng qua Compose, xem `tests/results/opa_runtime.json`; bộ ASGI này không bật OPA. Rate limit có cửa sổ 60 giây theo địa chỉ kết nối và tài khoản nhưng trạng thái chỉ nằm trong một tiến trình. Log chưa được đẩy tới kho append-only. JWT role có thể cũ sau khi đổi quyền; hành động admin đọc role hiện tại từ lab."]

@@ -1,5 +1,6 @@
 """Verify the running Compose lab and save redacted OPA evidence."""
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -10,10 +11,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app import issue_token
 
 ROOT = Path(__file__).resolve().parents[1]
-URL = "http://127.0.0.1:8000"
+URL = os.getenv("FIXED_URL", "http://127.0.0.1:8000")
 
 
 def decision(subject, owner):
+    direct_url = os.getenv("OPA_DIRECT_URL")
+    if direct_url:
+        response = httpx.post(direct_url, json={"input": {
+            "action": "account_read", "subject": subject, "owner": owner,
+        }}, timeout=5)
+        response.raise_for_status()
+        return response.json()["result"]
     code = (
         "import httpx,json; "
         "r=httpx.post('http://opa:8181/v1/data/minibank/authz/allow',"
