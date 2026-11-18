@@ -1,7 +1,5 @@
 # Đề tài 27 — MiniBank API Lab
 
-[![SadServers Level](https://img.shields.io/badge/SadServers-Master-FF6D00?style=for-the-badge&labelColor=FFC400&logo=kubernetes&logoColor=1A237E&logoSize=auto)](https://sadservers.com/u/DINH+TIEN+DUNG)
-
 Đồ án kiểm thử phân quyền đối tượng, phân quyền chức năng và giới hạn lạm dụng API. Dự án sử dụng **API tự viết trong lab cô lập**, đúng một trong hai lựa chọn của đề bài. Dữ liệu, tài khoản và token đều giả.
 
 Hai phiên bản có mã riêng: `app/before.py` (cố ý có lỗi để kiểm thử) và `app/after.py` (đã bổ sung kiểm soát). Chạy đồng thời để so sánh: `python -m uvicorn app.before:app --port 8001` và `python -m uvicorn app.after:app --port 8000`.
